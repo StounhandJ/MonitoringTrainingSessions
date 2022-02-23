@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringTrainingSessions", "MonitoringTrainingSessions\MonitoringTrainingSessions.csproj", "{F32E0405-F71A-4FBE-8993-D6627EEFE4C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordSDK", "DiscordSDK\DiscordSDK.csproj", "{1BFC4988-1981-42F7-9C08-60FB549D288D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F32E0405-F71A-4FBE-8993-D6627EEFE4C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F32E0405-F71A-4FBE-8993-D6627EEFE4C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F32E0405-F71A-4FBE-8993-D6627EEFE4C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F32E0405-F71A-4FBE-8993-D6627EEFE4C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BFC4988-1981-42F7-9C08-60FB549D288D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BFC4988-1981-42F7-9C08-60FB549D288D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BFC4988-1981-42F7-9C08-60FB549D288D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BFC4988-1981-42F7-9C08-60FB549D288D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
