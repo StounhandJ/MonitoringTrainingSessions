@@ -32,6 +32,15 @@ abstract public class Model<T> : IModel
 
         return model;
     }
+    
+    public static T select(Dictionary<string, object?>? data)
+    {
+        T? model = Model<T>.constrct();
+
+        model.@select(data);
+
+        return model;
+    }
 
     private static T constrct()
     {
@@ -48,7 +57,7 @@ abstract public class Model<T> : IModel
 
         if (data != null)
         {
-            sql += string.Format("where {0} ", generateParametrs(data));
+            sql += string.Format("where {0} ", generateParametrsWhere(data));
         }
 
         var result = _dbConnector.execute(sql, data);
@@ -65,7 +74,7 @@ abstract public class Model<T> : IModel
 
         if (data != null)
         {
-            sql += string.Format("where {0} ", generateParametrs(data));
+            sql += string.Format("where {0} ", generateParametrsWhere(data));
         }
 
         var results = _dbConnector.execute(sql, data);
@@ -87,7 +96,7 @@ abstract public class Model<T> : IModel
 
         if (data != null)
         {
-            sql += string.Format("where {0} ", generateParametrs(data));
+            sql += string.Format("where {0} ", generateParametrsWhere(data));
         }
 
         var result = _dbConnector.execute(sql, data);
@@ -140,7 +149,7 @@ abstract public class Model<T> : IModel
             Dictionary<string, object?> data = new Dictionary<string, object?>()
                 { { "id", this.GetType().GetProperty("id")?.GetValue(this)! } };
 
-            string sql = string.Format("delete from \"{0}\" where {1}", this.tableName, generateParametrs(data));
+            string sql = string.Format("delete from \"{0}\" where {1}", this.tableName, generateParametrsWhere(data));
 
             _dbConnector.execute(sql, data);
         }
@@ -196,10 +205,17 @@ abstract public class Model<T> : IModel
 
         return properties;
     }
-
+    
+    private static string generateParametrsWhere(Dictionary<string, object?> data)
+    {
+        string parametr = dictionaryToString("{0}=@{0} and ", data);
+        return parametr.Remove(parametr.Length - 5);
+    }
+    
     private static string generateParametrs(Dictionary<string, object?> data)
     {
-        return dictionaryToString("{0}=@{0} ", data);
+        string parametr = dictionaryToString("{0}=@{0}, ", data);
+        return parametr.Remove(parametr.Length - 2);
     }
 
     private static string generateNameProperty(Dictionary<string, object?> data)
