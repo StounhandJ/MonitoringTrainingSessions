@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using MonitoringTrainingSessions.Lib.Attributes;
 
 namespace MonitoringTrainingSessions.Lib.DB;
 
@@ -32,7 +33,7 @@ abstract public class Model<T> : IModel
 
         return model;
     }
-    
+
     public static T select(Dictionary<string, object?>? data)
     {
         T? model = Model<T>.constrct();
@@ -201,17 +202,18 @@ abstract public class Model<T> : IModel
         properties.AddRange(this.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Instance).ToList());
         properties.AddRange(this.GetType().GetProperties());
 
-        properties.RemoveAll((property => !property.CanWrite));
-
+        properties.RemoveAll((property =>
+            property.CustomAttributes.Any(attribute => attribute.AttributeType.Equals(typeof(Additional))) ||
+            property.Name == "tableName"));
         return properties;
     }
-    
+
     private static string generateParametrsWhere(Dictionary<string, object?> data)
     {
         string parametr = dictionaryToString("{0}=@{0} and ", data);
         return parametr.Remove(parametr.Length - 5);
     }
-    
+
     private static string generateParametrs(Dictionary<string, object?> data)
     {
         string parametr = dictionaryToString("{0}=@{0}, ", data);

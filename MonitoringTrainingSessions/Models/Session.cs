@@ -1,4 +1,4 @@
-﻿using MonitoringTrainingSessions.Lib;
+﻿using MonitoringTrainingSessions.Lib.Attributes;
 using MonitoringTrainingSessions.Lib.DB;
 
 namespace MonitoringTrainingSessions.Models;
@@ -11,6 +11,7 @@ public class Session: Model<Session>
     
     public string name { get; set; }
 
+    [Additional]
     public int Id
     {
         get => id;

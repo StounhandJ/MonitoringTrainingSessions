@@ -1,4 +1,4 @@
-﻿using MonitoringTrainingSessions.Lib;
+﻿using MonitoringTrainingSessions.Lib.Attributes;
 using MonitoringTrainingSessions.Lib.DB;
 
 namespace MonitoringTrainingSessions.Models;
@@ -14,6 +14,7 @@ public class Role: Model<Role>
     
     public string name { get; set; }
 
+    [Additional]
     public int Id
     {
         get => id;

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using MonitoringTrainingSessions.Lib;
+using MonitoringTrainingSessions.Lib.Attributes;
 using MonitoringTrainingSessions.Lib.DB;
 
 namespace MonitoringTrainingSessions.Models;
@@ -28,19 +29,49 @@ public class User : Model<User>
         set => _password = Encryption.CreateMD5(value);
     }
 
+    [Additional]
     public int Id
     {
         get => id;
     }
 
-    public Group Group
+    [Additional]
+    public Group Group 
     {
         get => Group.getById(group_id);
+        set
+        {
+            if (value.exist())
+            {
+                group_id = value.Id;
+            }
+        }
     }
 
+    [Additional]
     public Role Role
     {
         get => Role.getById(role_id);
+        set
+        {
+            if (value.exist())
+            {
+                role_id = value.Id;
+            }
+        }
+    }
+
+    public User(string login, string password, string surname, string name, string patronymic, Role role, Group group)
+    {
+        
+        this.Role = role;
+        this.Group = group;
+        this.name = name;
+        this.surname = surname;
+        this.patronymic = patronymic;
+        
+        this.login = login;
+        this.password = password;
     }
 
     public static User getByLoginPassword(string login, string password)

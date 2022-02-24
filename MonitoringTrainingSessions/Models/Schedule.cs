@@ -1,4 +1,4 @@
-﻿using MonitoringTrainingSessions.Lib;
+﻿using MonitoringTrainingSessions.Lib.Attributes;
 using MonitoringTrainingSessions.Lib.DB;
 
 namespace MonitoringTrainingSessions.Models;
@@ -15,18 +15,35 @@ public class Schedule: Model<Schedule>
     
     public int number_day_week { get; set; }
 
+    [Additional]
     public int Id
     {
         get => id;
     }
     
+    [Additional]
     public Group Group
     {
         get => Group.getById(group_id);
+        set
+        {
+            if (value.exist())
+            {
+                group_id = value.Id;
+            }
+        }
     }
     
+    [Additional]
     public Session Session
     {
         get => Session.getById(session_id);
+        set
+        {
+            if (value.exist())
+            {
+                session_id = value.Id;
+            }
+        }
     }
 }

@@ -1,0 +1,48 @@
+﻿<Page x:Class="MonitoringTrainingSessions.Pages.AuthorizationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:MonitoringTrainingSessions.Pages"
+      xmlns:viewModels="clr-namespace:MonitoringTrainingSessions.ViewModels"
+      mc:Ignorable="d"
+      Title="AuthorizationPage" Height="450" Width="800">
+    <Page.DataContext>
+        <viewModels:AuthorizationViewModel />
+    </Page.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.ColumnSpan="2" Grid.Column="0" Grid.Row="0" Text="Авторизация" HorizontalAlignment="Center"
+                   VerticalAlignment="Center" FontSize="30" />
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Логин: " HorizontalAlignment="Center" VerticalAlignment="Center"
+                   FontSize="20" />
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Пароль: " HorizontalAlignment="Center" VerticalAlignment="Center"
+                   FontSize="20" />
+
+        <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Login}" VerticalAlignment="Center" FontSize="15"
+                 Width="200" Height="40" HorizontalAlignment="Left" Background="#37b09c" />
+        <PasswordBox Grid.Row="2" Grid.Column="1" Name="PasswordBox" VerticalAlignment="Center" FontSize="15"
+                     Width="200" Height="40" HorizontalAlignment="Left" Background="#37b09c" />
+
+        <Button Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" Command="{Binding AuthorizationCommand}"
+                CommandParameter="{Binding ElementName=PasswordBox}" Width="170" Height="35" Name="ButtonReg"
+                Content="Авторизоваться" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15"
+                Background="#45edd1" />
+        <Button Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0" CommandParameter="RegisterPage"
+                Command="{Binding DataContext.ClickCommand}" Width="{Binding ElementName=ButtonReg, Path=Width}"
+                Height="{Binding ElementName=ButtonReg, Path=Height}" Content="Перейти к регестрации"
+                HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15" Background="#45edd1" />
+    </Grid>
+</Page>
