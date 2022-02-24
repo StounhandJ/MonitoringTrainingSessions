@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
-using MonitoringTrainingSessions.Lib;
 
-namespace MonitoringTrainingSessions
+namespace MonitoringTrainingSessions.Lib
 {
     public class Main
     {
