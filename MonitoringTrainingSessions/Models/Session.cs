@@ -3,9 +3,9 @@ using MonitoringTrainingSessions.Lib.DB;
 
 namespace MonitoringTrainingSessions.Models;
 
-public class Group : Model<Group>
+public class Session: Model<Session>
 {
-    protected override string tableName { get=>"groups"; }
+    protected override string tableName { get=>"sessions"; }
 
     private int id { get; set; }
     

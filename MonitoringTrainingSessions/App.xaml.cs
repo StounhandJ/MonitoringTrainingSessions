@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Windows;
-using MonitoringTrainingSessions.Lib;
+﻿using System.Windows;
+using MonitoringTrainingSessions.Lib.DB;
 using MonitoringTrainingSessions.Models;
 
 namespace MonitoringTrainingSessions
@@ -12,20 +11,13 @@ namespace MonitoringTrainingSessions
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            DB.connect("194.169.163.29", "training_sessions", "train_sess", "train_sess228");
+            DBConnector.connect("194.169.163.29", "training_sessions", "train_sess", "train_sess228");
             base.OnStartup(e);
-            var m = new User()
-            {
-                role_id = 1,
-                group_id = 1,
-
-                name = "f",
-                surname = "f",
-                patronymic = "f",
-                login = "f",
-                password = "f",
-            };
             
+            // var users = User.getAll();
+            // var group = Group.getById(1);
+            // group.name = "double";
+            // group.save();
         }
     }
 }

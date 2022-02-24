@@ -3,9 +3,12 @@ using MonitoringTrainingSessions.Lib.DB;
 
 namespace MonitoringTrainingSessions.Models;
 
-public class Group : Model<Group>
+public class Role: Model<Role>
 {
-    protected override string tableName { get=>"groups"; }
+    public const int TEACHER = 1;
+    public const int STUDENT = 2;
+    
+    protected override string tableName { get=>"roles"; }
 
     private int id { get; set; }
     

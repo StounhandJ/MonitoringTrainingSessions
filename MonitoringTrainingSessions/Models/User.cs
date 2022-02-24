@@ -1,14 +1,15 @@
 ﻿using MonitoringTrainingSessions.Lib;
+using MonitoringTrainingSessions.Lib.DB;
 
 namespace MonitoringTrainingSessions.Models;
 
-public class User : Model
+public class User : Model<User>
 {
     protected override string tableName { get=>"users"; }
 
-    protected int id { get; set; }
-    public int role_id { get; set; }
-    public int group_id { get; set; }
+    private int id { get; set; }
+    private int role_id { get; set; }
+    private int group_id { get; set; }
 
     public string name { get; set; }
     public string surname { get; set; }
@@ -23,11 +24,11 @@ public class User : Model
     
     public Group Group
     {
-        get
-        {
-            Group group = new Group();
-            group.getById(group_id);
-            return group;
-        }
+        get => Group.getById(group_id);
+    }
+    
+    public Role Role
+    {
+        get => Role.getById(role_id);
     }
 }

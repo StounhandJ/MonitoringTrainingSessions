@@ -1,12 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace MonitoringTrainingSessions.Lib;
+namespace MonitoringTrainingSessions.Lib.DB;
 
-abstract public class Model
+abstract public class Model<T> : IModel
+    where T : IModel
 {
-    private DB db = new DB();
+    private static DBConnector _dbConnector = new DBConnector();
 
     protected Model()
     {
@@ -14,28 +16,83 @@ abstract public class Model
     }
 
     protected abstract string tableName { get; }
-    
-    
-    public void getById(int id)
+
+    public static List<T> getAll(Dictionary<string, object?>? data = null)
     {
-        this.@select(new Dictionary<string, object?>(){{"id", id}});
+        T? model = Model<T>.constrct();
+
+        return model.@selectAll().ConvertAll(input => (T)input);
     }
 
-    public void select(Dictionary<string, object?>? data = null)
+    public static T getById(int id)
+    {
+        T? model = Model<T>.constrct();
+
+        model.@select(new Dictionary<string, object?>() { { "id", id } });
+
+        return model;
+    }
+
+    private static T constrct()
+    {
+        Type type = typeof(T);
+        ConstructorInfo? constructorInfoObj = type.GetConstructor(new Type[] { });
+
+        T? model = (T)constructorInfoObj?.Invoke(new object?[] { })!;
+        return model;
+    }
+
+    void IModel.select(Dictionary<string, object?>? data)
     {
         string sql = string.Format("select * from \"{0}\" ", this.tableName);
 
         if (data != null)
         {
-            sql += string.Format("where {0} ", this.generateParametrs(data));
+            sql += string.Format("where {0} ", generateParametrs(data));
         }
 
-        var result = db.execute(sql, data);
+        var result = _dbConnector.execute(sql, data);
 
         if (result.Count != 0)
         {
-            this.setPropertiesValue(result[0]);
+            setPropertiesValue(result[0]);
         }
+    }
+
+    public List<object> selectAll(Dictionary<string, object?>? data)
+    {
+        string sql = string.Format("select * from \"{0}\" ", this.tableName);
+
+        if (data != null)
+        {
+            sql += string.Format("where {0} ", generateParametrs(data));
+        }
+
+        var results = _dbConnector.execute(sql, data);
+
+        List<object> objects = new List<object>();
+        foreach (var result in results)
+        {
+            T? model = Model<T>.constrct();
+            model.setPropertiesValue(result);
+            objects.Add(model);
+        }
+
+        return objects;
+    }
+
+    int IModel.count(Dictionary<string, object?>? data)
+    {
+        string sql = string.Format("select * from \"{0}\" ", this.tableName);
+
+        if (data != null)
+        {
+            sql += string.Format("where {0} ", generateParametrs(data));
+        }
+
+        var result = _dbConnector.execute(sql, data);
+
+        return result.Count;
     }
 
     public void save()
@@ -55,7 +112,7 @@ abstract public class Model
         {
             sql = string.Format("update \"{0}\" set {1} where id={2}",
                 this.tableName,
-                this.generateParametrs(data),
+                generateParametrs(data),
                 this.GetType().GetProperty("id")!.GetValue(this)
             );
         }
@@ -63,12 +120,12 @@ abstract public class Model
         {
             sql = string.Format("insert into \"{0}\" ({1}) values({2}) returning id;",
                 this.tableName,
-                this.generateNameProperty(data),
-                this.generateValueProperty(data)
+                generateNameProperty(data),
+                generateValueProperty(data)
             );
         }
 
-        var result = db.execute(sql, data);
+        var result = _dbConnector.execute(sql, data);
 
         if (result.Count != 0)
         {
@@ -83,9 +140,9 @@ abstract public class Model
             Dictionary<string, object?> data = new Dictionary<string, object?>()
                 { { "id", this.GetType().GetProperty("id")?.GetValue(this)! } };
 
-            string sql = string.Format("delete from \"{0}\" where {1}", this.tableName, this.generateParametrs(data));
+            string sql = string.Format("delete from \"{0}\" where {1}", this.tableName, generateParametrs(data));
 
-            db.execute(sql, data);
+            _dbConnector.execute(sql, data);
         }
     }
 
@@ -102,7 +159,7 @@ abstract public class Model
         return ((int)value) != -1;
     }
 
-    private void setPropertiesValue(Dictionary<string, object> data)
+    public void setPropertiesValue(Dictionary<string, object> data)
     {
         this.setNullIndex();
 
@@ -140,24 +197,24 @@ abstract public class Model
         return properties;
     }
 
-    private string generateParametrs(Dictionary<string, object?> data)
+    private static string generateParametrs(Dictionary<string, object?> data)
     {
-        return this.dictionaryToString("{0}=@{0} ", data);
+        return dictionaryToString("{0}=@{0} ", data);
     }
 
-    private string generateNameProperty(Dictionary<string, object?> data)
+    private static string generateNameProperty(Dictionary<string, object?> data)
     {
-        string names = this.dictionaryToString("{0}, ", data);
+        string names = dictionaryToString("{0}, ", data);
         return names.Remove(names.Length - 2);
     }
 
-    private string generateValueProperty(Dictionary<string, object?> data)
+    private static string generateValueProperty(Dictionary<string, object?> data)
     {
-        string value = this.dictionaryToString("@{0}, ", data);
+        string value = dictionaryToString("@{0}, ", data);
         return value.Remove(value.Length - 2);
     }
 
-    private string dictionaryToString(string format, Dictionary<string, object?> data)
+    private static string dictionaryToString(string format, Dictionary<string, object?> data)
     {
         string str = "";
         foreach (var paramenr in data)

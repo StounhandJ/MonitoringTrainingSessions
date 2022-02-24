@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 using Npgsql;
 
-namespace MonitoringTrainingSessions.Lib;
+namespace MonitoringTrainingSessions.Lib.DB;
 
-public class DB
+public class DBConnector
 {
     private string _server;
     private string _databaseName;
     private string _userName;
     private string _password;
 
-    public DB()
+    public DBConnector()
     {
-        if (DB.Connection == null)
+        if (DBConnector.Connection == null)
         {
             throw new Exception("DataBase no conected");
         }
@@ -22,7 +22,7 @@ public class DB
     public List<Dictionary<string, object>> execute(string sql, Dictionary<string, object?>? data = null)
     {
         List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
-        var cmd = new NpgsqlCommand(sql, DB.Connection);
+        var cmd = new NpgsqlCommand(sql, DBConnector.Connection);
         if (data != null)
         {
             foreach (var parametr in data)
