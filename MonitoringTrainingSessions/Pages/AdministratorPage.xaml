@@ -29,13 +29,13 @@
         <TextBlock Grid.Row="0" Grid.Column="0" Text="Пользователи: "/>
 
         <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" CanUserDeleteRows="False" IsReadOnly="True"
-                  CanUserAddRows="False" SelectionMode="Single"
+                  CanUserAddRows="False" SelectionMode="Single" SelectedItem="{Binding SelectedUser}"
                   AutoGenerateColumns="False" ItemsSource="{Binding Users, Mode=OneWay}">
             <DataGrid.InputBindings>
                 <MouseBinding
                     MouseAction="LeftDoubleClick"
                     Command="{Binding DoubleClickCommand}"
-                    CommandParameter="{Binding CollectionView/}" />
+                    CommandParameter="{Binding SelectedUser}" />
             </DataGrid.InputBindings>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="ФИО" Binding="{Binding Path=FIO}" />

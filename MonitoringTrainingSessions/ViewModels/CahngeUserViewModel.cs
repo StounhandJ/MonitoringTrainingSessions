@@ -1,45 +1,63 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using MonitoringTrainingSessions.Commands.DelegateCommand;
 using MonitoringTrainingSessions.Models;
-using MonitoringTrainingSessions.Pages;
 
 namespace MonitoringTrainingSessions.ViewModels;
 
-public class AdministratorViewModel : BaseViewModel
+public class CahngeUserViewModel : BaseViewModel
 {
-    public AdministratorViewModel()
+    public CahngeUserViewModel(User user, Page page, MainViewModel dataContext)
     {
-        Users = new ObservableCollection<User>(User.getAll());
+        DataContext = dataContext;
+        User = user;
+        _exitPage = page;
         Sessions = new ObservableCollection<Session>(Session.getAll());
         Groups = new ObservableCollection<Group>(Group.getAll());
-        DoubleClickCommand = new DelegateCommand((o) =>
+        ExitCommand = new DelegateCommand((o) => { Exit(); });
+        SaveCommand = new DelegateCommand((o) =>
         {
-            DataContext.Content = new CahngeUserPage((User)o, new AdministratorPage() { DataContext = this }, DataContext);
+            User.save();
+            Exit();
+        });
+        
+        DeleteCommand = new DelegateCommand((o) =>
+        {
+            User.delete();
+            Exit();
         });
     }
 
-    private ObservableCollection<User> _users;
-
-    public ObservableCollection<User> Users
+    public CahngeUserViewModel()
     {
-        get => _users;
-        set
-        {
-            _users = value;
-            this.OnPropertyChanged(nameof(Users));
-        }
     }
 
-    private User _selectedUser;
+    private Page _exitPage;
+    
+    private User _user;
 
-    public User SelectedUser
+    public User User
     {
-        get => _selectedUser;
+        get => _user;
         set
         {
-            _selectedUser = value;
-            this.OnPropertyChanged(nameof(SelectedUser));
+            _user = value;
+            Role = Role.getById(3);
+            this.OnPropertyChanged(nameof(User));
+        }
+    }
+    
+    private Role _role;
+
+    public Role Role
+    {
+        get => _role;
+        set
+        {
+            _role = value;
+            this.OnPropertyChanged(nameof(Role));
         }
     }
 
@@ -67,7 +85,11 @@ public class AdministratorViewModel : BaseViewModel
         }
     }
 
-    public ICommand DoubleClickCommand { get; set; }
+    public ICommand ExitCommand { get; set; }
+    
+    public ICommand SaveCommand { get; set; }
+    
+    public ICommand DeleteCommand { get; set; }
 
     private MainViewModel _dataContext;
 
@@ -79,5 +101,10 @@ public class AdministratorViewModel : BaseViewModel
             _dataContext = value;
             this.OnPropertyChanged(nameof(DataContext));
         }
+    }
+
+    public void Exit()
+    {
+        DataContext.Content = _exitPage;
     }
 }
