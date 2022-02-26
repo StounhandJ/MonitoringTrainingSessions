@@ -22,6 +22,8 @@ public class RegisterCommand : ICommand
 
     public void Execute(object parameter)
     {
+        string password = ((PasswordBox)parameter).Password;
+        
         if (string.IsNullOrWhiteSpace(m_viewModel.Login) || m_viewModel.Login.Length > 30)
         {
             return;
@@ -32,7 +34,7 @@ public class RegisterCommand : ICommand
             return;
         }
 
-        if (string.IsNullOrWhiteSpace(m_viewModel.Password))
+        if (string.IsNullOrWhiteSpace(password))
         {
             return;
         }
@@ -41,9 +43,9 @@ public class RegisterCommand : ICommand
         string name = m_viewModel.FIO.Split(' ')[1];
         string patronymic = m_viewModel.FIO.Split(' ')[2];
 
-        User user = new User(m_viewModel.Login, m_viewModel.Password, surname, name, patronymic, m_viewModel.Role, m_viewModel.Group);
+        User user = new User(m_viewModel.Login, password, surname, name, patronymic, m_viewModel.Role, m_viewModel.Group);
         user.save();
-        m_viewModel.DataContext.Content = new Page();
+        m_viewModel.DataContext.User = user;
     }
 
     public event EventHandler CanExecuteChanged;

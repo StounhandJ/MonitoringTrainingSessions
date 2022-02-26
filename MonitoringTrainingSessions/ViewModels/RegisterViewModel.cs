@@ -42,18 +42,6 @@ public class RegisterViewModel : BaseViewModel
         }
     }
 
-    private string _password;
-
-    public string Password
-    {
-        get => _password;
-        set
-        {
-            _password = value;
-            this.OnPropertyChanged(nameof(Password));
-        }
-    }
-
     private Role _role;
 
     public Role Role

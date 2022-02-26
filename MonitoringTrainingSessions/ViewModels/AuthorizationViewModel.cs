@@ -7,14 +7,13 @@ public class AuthorizationViewModel : BaseViewModel
 {
     public AuthorizationViewModel()
     {
-        _authorizationCommand = new AuthorizationCommand(this);
+        AuthorizationCommand = new AuthorizationCommand(this);
     }
-
-    private ICommand _authorizationCommand;
 
     public ICommand AuthorizationCommand
     {
-        get { return _authorizationCommand; }
+        get;
+        set;
     }
 
     private string _login;
@@ -25,6 +24,7 @@ public class AuthorizationViewModel : BaseViewModel
         set
         {
             _login = value;
+            
             this.OnPropertyChanged(nameof(Login));
         }
     }

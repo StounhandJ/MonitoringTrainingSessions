@@ -1,0 +1,70 @@
+﻿<Page x:Class="MonitoringTrainingSessions.Pages.AdministratorPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:MonitoringTrainingSessions.Pages"
+      xmlns:viewModels="clr-namespace:MonitoringTrainingSessions.ViewModels"
+      mc:Ignorable="d"
+      Title="AdministratorPage" Height="450" Width="800">
+    <Page.DataContext>
+        <viewModels:AdministratorViewModel />
+    </Page.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Пользователи: "/>
+
+        <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" CanUserDeleteRows="False" IsReadOnly="True"
+                  CanUserAddRows="False" SelectionMode="Single"
+                  AutoGenerateColumns="False" ItemsSource="{Binding Users, Mode=OneWay}">
+            <DataGrid.InputBindings>
+                <MouseBinding
+                    MouseAction="LeftDoubleClick"
+                    Command="{Binding DoubleClickCommand}"
+                    CommandParameter="{Binding CollectionView/}" />
+            </DataGrid.InputBindings>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="ФИО" Binding="{Binding Path=FIO}" />
+                <DataGridTextColumn Header="Логин" Binding="{Binding Path=login}" />
+                <DataGridTextColumn Header="Роль" Binding="{Binding Path=Role.name}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="Предметы: "/>
+
+        <DataGrid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" CanUserDeleteRows="False"
+                  SelectionMode="Single" RowEditEnding="DataGridSession_OnRowEditEnding"
+                  AutoGenerateColumns="False" ItemsSource="{Binding Sessions, Mode=OneWay}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" Binding="{Binding Path=name, UpdateSourceTrigger=PropertyChanged}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="Группы: "/>
+
+        <DataGrid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" CanUserDeleteRows="False"
+                  SelectionMode="Single" RowEditEnding="DataGridGroup_OnRowEditEnding"
+                  AutoGenerateColumns="False" ItemsSource="{Binding Groups, Mode=OneWay}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название" Binding="{Binding Path=name, UpdateSourceTrigger=PropertyChanged}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button Grid.Row="6" Grid.Column="1" Padding="5" Width="170" Height="35" Content="Выйти"
+                Command="{Binding DataContext.ExitCommand}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                FontSize="15" Background="#45edd1" />
+    </Grid>
+</Page>

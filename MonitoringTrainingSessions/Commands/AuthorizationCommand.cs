@@ -37,7 +37,6 @@ public class AuthorizationCommand : ICommand
         if (user.exist())
         {
             m_viewModel.DataContext.User = user;
-            m_viewModel.DataContext.Content = new Page();
         }
     }
 

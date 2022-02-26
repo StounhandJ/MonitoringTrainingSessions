@@ -7,6 +7,7 @@ public class Role: Model<Role>
 {
     public const int TEACHER = 1;
     public const int STUDENT = 2;
+    public const int ADMIN = 3;
     
     protected override string tableName { get=>"roles"; }
 

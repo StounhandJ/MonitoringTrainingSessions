@@ -34,6 +34,12 @@ public class User : Model<User>
     {
         get => id;
     }
+    
+    [Additional]
+    public string FIO
+    {
+        get => string.Format("{0} {1} {2}", this.surname, this.name, this.patronymic);
+    }
 
     [Additional]
     public Group Group 
@@ -72,6 +78,11 @@ public class User : Model<User>
         
         this.login = login;
         this.password = password;
+    }
+
+    public User()
+    {
+        
     }
 
     public static User getByLoginPassword(string login, string password)

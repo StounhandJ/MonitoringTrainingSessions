@@ -22,7 +22,7 @@ abstract public class Model<T> : IModel
     {
         T? model = Model<T>.constrct();
 
-        return model.@selectAll().ConvertAll(input => (T)input);
+        return model.@selectAll(data).ConvertAll(input => (T)input);
     }
 
     public static T getById(int id)
@@ -123,7 +123,7 @@ abstract public class Model<T> : IModel
             sql = string.Format("update \"{0}\" set {1} where id={2}",
                 this.tableName,
                 generateParametrs(data),
-                this.GetType().GetProperty("id")!.GetValue(this)
+                this.getId()!.GetValue(this)
             );
         }
         else
@@ -148,7 +148,7 @@ abstract public class Model<T> : IModel
         if (this.exist())
         {
             Dictionary<string, object?> data = new Dictionary<string, object?>()
-                { { "id", this.GetType().GetProperty("id")?.GetValue(this)! } };
+                { { "id", this.getId()?.GetValue(this)! } };
 
             string sql = string.Format("delete from \"{0}\" where {1}", this.tableName, generateParametrsWhere(data));
 
@@ -158,7 +158,7 @@ abstract public class Model<T> : IModel
 
     public bool exist()
     {
-        PropertyInfo? property = this.GetType().GetProperty("id");
+        PropertyInfo? property = this.getId();
         if (property == null)
             return false;
 
@@ -175,9 +175,7 @@ abstract public class Model<T> : IModel
 
         foreach (var parametr in data)
         {
-            PropertyInfo? property = this.GetType().GetProperty(parametr.Key) ??
-                                     this.GetType().GetProperty(parametr.Key,
-                                         BindingFlags.NonPublic | BindingFlags.Instance);
+            PropertyInfo? property = this.getProperty(parametr.Key);
             if (property != null)
             {
                 property.SetValue(this, parametr.Value);
@@ -187,8 +185,7 @@ abstract public class Model<T> : IModel
 
     private void setNullIndex()
     {
-        PropertyInfo? propertyId = this.GetType().GetProperty("id", BindingFlags.NonPublic | BindingFlags.Instance) ??
-                                   this.GetType().GetProperty("id");
+        PropertyInfo? propertyId = this.getId();
         if (propertyId != null)
         {
             propertyId.SetValue(this, -1);
@@ -241,5 +238,16 @@ abstract public class Model<T> : IModel
         }
 
         return str;
+    }
+
+    private PropertyInfo? getId()
+    {
+        return this.getProperty("id");
+    }
+    
+    private PropertyInfo? getProperty(string key)
+    {
+        return this.GetType().GetProperty(key, BindingFlags.NonPublic | BindingFlags.Instance) ??
+                                   this.GetType().GetProperty(key);
     }
 }

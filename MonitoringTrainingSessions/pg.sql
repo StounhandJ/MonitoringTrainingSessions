@@ -40,4 +40,4 @@ CREATE TABLE "marks" (
 	"date" timestamp NOT NULL
 );
 
-insert into roles("id", "name") values (1, 'teacher'),(2, 'student')
+insert into roles("id", "name") values (1, 'teacher'),(2, 'student'),(3, 'admin')

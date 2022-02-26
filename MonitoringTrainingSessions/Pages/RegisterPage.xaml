@@ -43,7 +43,7 @@
                  Width="200" Height="40" HorizontalAlignment="Left" />
         <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Login}" VerticalAlignment="Center" FontSize="15"
                  Width="200" Height="40" HorizontalAlignment="Left" />
-        <PasswordBox Grid.Row="3" Grid.Column="1" Password="{Binding Password}" VerticalAlignment="Center" FontSize="15"
+        <PasswordBox Grid.Row="3" Grid.Column="1" Name="PasswordBox" VerticalAlignment="Center" FontSize="15"
                  Width="200" Height="40" HorizontalAlignment="Left" />
         <ComboBox Grid.Row="4" Grid.Column="1" SelectedIndex="0" SelectedItem="{Binding Role}" Width="200" Height="40"
                   HorizontalAlignment="Left" Background="#37b09c" ItemsSource="{Binding DataContext.Roles}"
@@ -54,7 +54,7 @@
                   DisplayMemberPath="name" SelectedValuePath="ID" />
 
         <Button Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0" Width="170" Height="35" Name="ButtonReg"
-                Command="{Binding RegisterCommand}" Content="Зарегистрироваться" HorizontalAlignment="Center"
+                Command="{Binding RegisterCommand}" CommandParameter="{Binding ElementName=PasswordBox}" Content="Зарегистрироваться" HorizontalAlignment="Center"
                 VerticalAlignment="Center" FontSize="15" Background="#45edd1" />
         <Button Grid.Row="7" Grid.ColumnSpan="2" Grid.Column="0" CommandParameter="AuthorizationPage"
                 Command="{Binding DataContext.ClickCommand}" Width="{Binding ElementName=ButtonReg, Path=Width}"
