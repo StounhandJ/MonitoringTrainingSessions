@@ -15,6 +15,10 @@ public partial class TeacherPage : Page
         SessionComboBox.ItemsSource = sessions;
         GroupComboBox.ItemsSource = user.Groups;
         DayComboBox.ItemsSource = new List<int>() { 1, 2, 3, 4, 5 };
+
+        GroupMarksComboBox.ItemsSource = user.Groups;
+        SessionMarkComboBox.ItemsSource = sessions;
+        MarksComboBox.ItemsSource = new List<int>() { 2, 3, 4, 5 };
     }
 
     private void SaveButton_OnClick(object sender, RoutedEventArgs e)
@@ -76,6 +80,46 @@ public partial class TeacherPage : Page
         else
         {
             SessionComboBox.SelectedItem = _schedule.Session;
+        }
+    }
+
+
+    private void GroupMarksComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        Group? group = (Group?)((ComboBox)sender).SelectedItem;
+        if (group != null)
+        {
+            StudentComboBox.ItemsSource = group.Users.FindAll(u => u.Role.Id == Role.STUDENT);
+        }
+    }
+
+
+    private Mark? _mark;
+
+    private void SaveMarkButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        // if (_isMark)
+        // {
+        //     _mark.save();
+        // }
+        // else
+        // {
+        //     _mark.delete();
+        // }
+    }
+
+    private void updateMark()
+    {
+        _mark = Mark.getBySessionUserDate((Session)SessionComboBox.SelectedItem, (User)StudentComboBox.SelectedItem, DatePicker.DisplayDate);
+        if (!_mark.exist())
+        {
+            _mark.date = DatePicker.DisplayDate;
+            _mark.Session = (Session)SessionComboBox.SelectedItem;
+            _mark.whoWasPutUser = (User)StudentComboBox.SelectedItem;
+        }
+        else
+        {
+            MarksComboBox.SelectedItem = _mark.mark;
         }
     }
 }

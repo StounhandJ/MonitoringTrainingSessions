@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MonitoringTrainingSessions.Lib.Attributes;
 using MonitoringTrainingSessions.Lib.DB;
 
@@ -63,5 +64,15 @@ public class Mark: Model<Mark>
                 session_id = value.Id;
             }
         }
+    }
+    
+    public static Mark getBySessionUserDate(Session session, User whoWasUser, DateTime date)
+    {
+        return Mark.select(new Dictionary<string, object?>()
+        {
+            { "session_id", session.Id },
+            { "who_was_put_user", whoWasUser.Id},
+            { "date", date}
+        });
     }
 }

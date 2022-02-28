@@ -34,5 +34,31 @@
 
             <Button Click="SaveButton_OnClick" x:Name="SaveButton" FontSize="18" Content="Сохранить" />
         </StackPanel>
+        
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <ComboBox SelectedIndex="0" Height="40"
+                      HorizontalAlignment="Left" Background="#37b09c"
+                      x:Name="GroupMarksComboBox"
+                      SelectionChanged="GroupMarksComboBox_OnSelectionChanged"
+                      DisplayMemberPath="name" />
+            <ComboBox SelectedIndex="0" Width="100" Height="40"
+                      HorizontalAlignment="Left" Background="#37b09c"
+                      x:Name="StudentComboBox"
+                      />
+            
+            <ComboBox SelectedIndex="0" Height="40"
+                      HorizontalAlignment="Left" Background="#37b09c"
+                      x:Name="SessionMarkComboBox"
+                      DisplayMemberPath="name" />
+            
+            <ComboBox SelectedIndex="0" Height="40"
+                      HorizontalAlignment="Left" Background="#37b09c"
+                      x:Name="MarksComboBox"
+                      DisplayMemberPath="name" />
+            
+            <DatePicker x:Name="DatePicker"/>
+
+            <Button Click="SaveMarkButton_OnClick" x:Name="SaveMarkButton" FontSize="18" Content="Сохранить" />
+        </StackPanel>
     </Grid>
 </Page>
