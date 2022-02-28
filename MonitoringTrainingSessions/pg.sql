@@ -40,7 +40,7 @@ CREATE TABLE "marks" (
 );
 
 CREATE TABLE "user_groups"(
-  "user_id" integer NOT NULL REFERENCES "users" ("id"),
+  "user_id" integer NOT NULL REFERENCES "users" ("id") ON DELETE CASCADE,
   "group_id" integer NOT NULL REFERENCES "groups" ("id")
 );
 

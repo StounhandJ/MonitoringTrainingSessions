@@ -3,36 +3,37 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:MonitoringTrainingSessions.Pages"
-      xmlns:viewModels="clr-namespace:MonitoringTrainingSessions.ViewModels"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
       mc:Ignorable="d"
       Title="CahngeUserPage" Height="450" Width="800">
-    <Page.DataContext>
-        <viewModels:CahngeUserViewModel />
-    </Page.DataContext>
     <StackPanel HorizontalAlignment="Center">
         <StackPanel Orientation="Horizontal">
             <TextBox FontSize="16" VerticalContentAlignment="Center" Text="Логин: " />
-            <TextBox Text="{Binding User.login, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
+            <TextBox VerticalAlignment="Center"
                      FontSize="15"
-                     Width="200" Height="40" HorizontalAlignment="Left" Background="#37b09c" />
+                     Width="200" Height="40" x:Name="LoginTextBox" HorizontalAlignment="Left" Background="#37b09c" />
         </StackPanel>
         
         <StackPanel Orientation="Horizontal">
             <TextBox FontSize="16" VerticalContentAlignment="Center" Text="ФИО: " />
-            <TextBox Text="{Binding User.FIO, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center"
+            <TextBox VerticalAlignment="Center"
                      FontSize="15"
-                     Width="200" Height="40" HorizontalAlignment="Left" Background="#37b09c" />
+                     Width="200" Height="40" x:Name="FIOTextBox" HorizontalAlignment="Left" Background="#37b09c" />
         </StackPanel>
         
         <StackPanel Orientation="Horizontal">
             <TextBox FontSize="16" VerticalContentAlignment="Center" Text="Роль: " />
-            <ComboBox SelectedIndex="0" SelectedItem="{Binding Role}" Width="200" Height="40"
-                  HorizontalAlignment="Left" Background="#37b09c" ItemsSource="{Binding DataContext.Roles}"
-                  DisplayMemberPath="name" SelectedValuePath="ID" />
+            <ComboBox SelectedIndex="0" Width="200" Height="40"
+                  HorizontalAlignment="Left" Background="#37b09c"
+                  x:Name="RoleComboBox"
+                  DisplayMemberPath="name" />
+        </StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <TextBox FontSize="16" VerticalContentAlignment="Center" Text="Группы: " />
+            <xctk:CheckComboBox x:Name="GroupsCheckComboBox" Margin="5"/>
         </StackPanel>
         
-        <Button FontSize="18" Command="{Binding SaveCommand}" Content="Сохранить"/>
-        <Button FontSize="18" Command="{Binding DeleteCommand}" Content="Удалить"/>
+        <Button Click="SaveButton_OnClick" x:Name="SaveButton" FontSize="18" Content="Сохранить"/>
+        <Button Click="DeleteButton_OnClick" x:Name="DeleteButton" FontSize="18" Content="Удалить"/>
     </StackPanel>
 </Page>

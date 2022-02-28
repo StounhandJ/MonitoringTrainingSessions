@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using MonitoringTrainingSessions.Lib;
 using MonitoringTrainingSessions.Lib.Attributes;
 using MonitoringTrainingSessions.Lib.DB;
 
 namespace MonitoringTrainingSessions.Models;
 
+[ManyToMany]
 public class User : Model<User>
 {
     protected override string tableName
@@ -69,12 +71,31 @@ public class User : Model<User>
     }
     
     [Additional]
-    public List<Group> Group
+    public List<Group> Groups
     {
         get
         {
             return UserGroups.getAll(new Dictionary<string, object?>() { { "user_id", id } })
                 .ConvertAll(userGroups => userGroups.Group);
+        }
+        set
+        {
+            var currentGroups = Groups; 
+            foreach (var group in currentGroups)
+            {
+                if (!value.Any(g => g.Equals(group)))
+                {
+                    UserGroups.getByUserAndGroup(this, group).delete();
+                }
+            }
+
+            foreach (var group in value)
+            {
+                if (!currentGroups.Any(g => g.Equals(group)))
+                {
+                    (new UserGroups(this, group)).save();
+                }
+            }
         }
     }
 
@@ -99,7 +120,7 @@ public class User : Model<User>
         this.patronymic = patronymic;
 
         this.login = login;
-        this.password = password;
+        this._password = password;
     }
 
     public User(string login, string password, string fio, Role role)
@@ -108,7 +129,7 @@ public class User : Model<User>
         this.FIO = fio;
 
         this.login = login;
-        this.password = password;
+        this._password = password;
     }
 
     public User()

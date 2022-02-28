@@ -1,4 +1,5 @@
-﻿using MonitoringTrainingSessions.Lib.Attributes;
+﻿using System.Collections.Generic;
+using MonitoringTrainingSessions.Lib.Attributes;
 using MonitoringTrainingSessions.Lib.DB;
 
 namespace MonitoringTrainingSessions.Models;
@@ -45,5 +46,14 @@ public class Schedule: Model<Schedule>
                 session_id = value.Id;
             }
         }
+    }
+    
+    public static Schedule getByGroupDay(Group group, int day)
+    {
+        return Schedule.select(new Dictionary<string, object?>()
+        {
+            { "group_id", group.Id },
+            { "number_day_week", day}
+        });
     }
 }

@@ -116,12 +116,13 @@ abstract public class Model<T> : IModel
         Dictionary<string, object?> data = new Dictionary<string, object?>();
         foreach (var property in propertes)
         {
-            if (property.Name != "id")
+            if (property.Name != "id" && property.GetValue(this) != null)
             {
                 data.Add(property.Name, property.GetValue(this));
             }
         }
 
+        
         string sql;
         if (this.exist())
         {
@@ -133,11 +134,16 @@ abstract public class Model<T> : IModel
         }
         else
         {
-            sql = string.Format("insert into \"{0}\" ({1}) values({2}) returning id;",
+            sql = string.Format("insert into \"{0}\" ({1}) values({2})",
                 this.getTableName(),
                 generateNameProperty(data),
                 generateValueProperty(data)
             );
+
+            if (!isSetCustomAttribute(typeof(ManyToMany)))
+            {
+                sql += " returning id";
+            }
         }
 
         var result = _dbConnector.execute(sql, data);
@@ -148,16 +154,24 @@ abstract public class Model<T> : IModel
         }
     }
 
-    public void delete()
+    public void delete(Dictionary<string, object?>? data = null)
     {
-        if (this.exist())
+        if (this.exist() || isSetCustomAttribute(typeof(ManyToMany)))
         {
-            Dictionary<string, object?> data = new Dictionary<string, object?>()
+            Dictionary<string, object?> dataDelete = new Dictionary<string, object?>()
                 { { "id", this.getId()?.GetValue(this)! } };
+            if (data!=null)
+            {
+                dataDelete = data;
+            }
+            else
+            {
+                this.getId()!.SetValue(this, -1);
+            }
 
-            string sql = string.Format("delete from \"{0}\" where {1}", this.getTableName(), generateParametrsWhere(data));
+            string sql = string.Format("delete from \"{0}\" where {1}", this.getTableName(), generateParametrsWhere(dataDelete));
 
-            _dbConnector.execute(sql, data);
+            _dbConnector.execute(sql, dataDelete);
         }
     }
 
@@ -275,5 +289,10 @@ abstract public class Model<T> : IModel
     private CustomAttributeData getAttribute(PropertyInfo property, Type attribute)
     {
         return property.CustomAttributes.First(a => a.AttributeType.Equals(attribute));
+    }
+    
+    private bool isSetCustomAttribute(Type attribute)
+    {
+        return this.GetType().CustomAttributes.Any(a => a.AttributeType.Equals(attribute));
     }
 }

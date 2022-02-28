@@ -16,4 +16,18 @@ public class Session: Model<Session>
     {
         get => id;
     }
+    
+    public new static bool Equals(object objA, object objB)
+    {
+        if (objA.GetType() == objB.GetType() && objB.GetType() == typeof(Session))
+            return ((Session)objA).id == ((Session)objB).id;
+        return false;
+    }
+    
+    public override bool Equals(object? objA)
+    {
+        if (objA == null)
+            return false;
+        return Session.Equals(this, objA);
+    }
 }
