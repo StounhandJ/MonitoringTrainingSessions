@@ -54,7 +54,7 @@ abstract public class Model<T> : IModel
 
     void IModel.select(Dictionary<string, object?>? data)
     {
-        string sql = string.Format("select * from \"{0}\" ", this.tableName);
+        string sql = string.Format("select * from \"{0}\" ", this.getTableName());
 
         if (data != null)
         {
@@ -69,9 +69,14 @@ abstract public class Model<T> : IModel
         }
     }
 
-    public List<object> selectAll(Dictionary<string, object?>? data)
+    public List<object> selectAll(Dictionary<string, object?>? data, string? dopSql = null)
     {
-        string sql = string.Format("select * from \"{0}\" ", this.tableName);
+        string sql = string.Format("select * from \"{0}\" ", this.getTableName());
+
+        if (dopSql != null)
+        {
+            sql += string.Format("{0} ", dopSql);
+        }
 
         if (data != null)
         {
@@ -93,7 +98,7 @@ abstract public class Model<T> : IModel
 
     int IModel.count(Dictionary<string, object?>? data)
     {
-        string sql = string.Format("select * from \"{0}\" ", this.tableName);
+        string sql = string.Format("select * from \"{0}\" ", this.getTableName());
 
         if (data != null)
         {
@@ -121,7 +126,7 @@ abstract public class Model<T> : IModel
         if (this.exist())
         {
             sql = string.Format("update \"{0}\" set {1} where id={2}",
-                this.tableName,
+                this.getTableName(),
                 generateParametrs(data),
                 this.getId()!.GetValue(this)
             );
@@ -129,7 +134,7 @@ abstract public class Model<T> : IModel
         else
         {
             sql = string.Format("insert into \"{0}\" ({1}) values({2}) returning id;",
-                this.tableName,
+                this.getTableName(),
                 generateNameProperty(data),
                 generateValueProperty(data)
             );
@@ -150,7 +155,7 @@ abstract public class Model<T> : IModel
             Dictionary<string, object?> data = new Dictionary<string, object?>()
                 { { "id", this.getId()?.GetValue(this)! } };
 
-            string sql = string.Format("delete from \"{0}\" where {1}", this.tableName, generateParametrsWhere(data));
+            string sql = string.Format("delete from \"{0}\" where {1}", this.getTableName(), generateParametrsWhere(data));
 
             _dbConnector.execute(sql, data);
         }
@@ -183,6 +188,11 @@ abstract public class Model<T> : IModel
         }
     }
 
+    public string getTableName()
+    {
+        return this.tableName;
+    }
+
     private void setNullIndex()
     {
         PropertyInfo? propertyId = this.getId();
@@ -200,7 +210,7 @@ abstract public class Model<T> : IModel
         properties.AddRange(this.GetType().GetProperties());
 
         properties.RemoveAll((property =>
-            property.CustomAttributes.Any(attribute => attribute.AttributeType.Equals(typeof(Additional))) ||
+            isSetCustomAttribute(property, typeof(Additional)) ||
             property.Name == "tableName"));
         return properties;
     }
@@ -244,10 +254,26 @@ abstract public class Model<T> : IModel
     {
         return this.getProperty("id");
     }
-    
+
     private PropertyInfo? getProperty(string key)
     {
-        return this.GetType().GetProperty(key, BindingFlags.NonPublic | BindingFlags.Instance) ??
-                                   this.GetType().GetProperty(key);
+        PropertyInfo? property = this.GetType().GetProperty(key, BindingFlags.NonPublic | BindingFlags.Instance) ??
+                                 this.GetType().GetProperty(key);
+        if (property != null && isSetCustomAttribute(property, typeof(Additional)))
+        {
+            return null;
+        }
+
+        return property;
+    }
+
+    private bool isSetCustomAttribute(PropertyInfo property, Type attribute)
+    {
+        return property.CustomAttributes.Any(a => a.AttributeType.Equals(attribute));
+    }
+
+    private CustomAttributeData getAttribute(PropertyInfo property, Type attribute)
+    {
+        return property.CustomAttributes.First(a => a.AttributeType.Equals(attribute));
     }
 }

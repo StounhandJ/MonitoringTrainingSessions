@@ -53,18 +53,6 @@ public class RegisterViewModel : BaseViewModel
             this.OnPropertyChanged(nameof(Role));
         }
     }
-    
-    private Group _group;
-
-    public Group Group
-    {
-        get => _group;
-        set
-        {
-            _group = value;
-            this.OnPropertyChanged(nameof(Group));
-        }
-    }
 
     private MainViewModel _dataContext;
 

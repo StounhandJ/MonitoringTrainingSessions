@@ -14,7 +14,6 @@ public class User : Model<User>
 
     private int id { get; set; }
     private int role_id { get; set; }
-    private int group_id { get; set; }
 
     public string name { get; set; }
     public string surname { get; set; }
@@ -68,17 +67,14 @@ public class User : Model<User>
             }
         }
     }
-
+    
     [Additional]
-    public Group Group
+    public List<Group> Group
     {
-        get => Group.getById(group_id);
-        set
+        get
         {
-            if (value.exist())
-            {
-                group_id = value.Id;
-            }
+            return UserGroups.getAll(new Dictionary<string, object?>() { { "user_id", id } })
+                .ConvertAll(userGroups => userGroups.Group);
         }
     }
 
@@ -95,13 +91,21 @@ public class User : Model<User>
         }
     }
 
-    public User(string login, string password, string surname, string name, string patronymic, Role role, Group group)
+    public User(string login, string password, string surname, string name, string patronymic, Role role)
     {
         this.Role = role;
-        this.Group = group;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
+
+        this.login = login;
+        this.password = password;
+    }
+
+    public User(string login, string password, string fio, Role role)
+    {
+        this.Role = role;
+        this.FIO = fio;
 
         this.login = login;
         this.password = password;

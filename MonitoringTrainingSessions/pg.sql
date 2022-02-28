@@ -16,7 +16,6 @@ CREATE TABLE "sessions" (
 CREATE TABLE "users" (
 	"id" serial NOT NULL PRIMARY KEY,
 	"role_id" integer NOT NULL REFERENCES "roles" ("id"),
-	"group_id" integer NOT NULL REFERENCES "groups" ("id"),
 	"surname" VARCHAR(255) NOT NULL,
 	"name" VARCHAR(255) NOT NULL,
 	"patronymic" VARCHAR(255) DEFAULT '-',
@@ -38,6 +37,11 @@ CREATE TABLE "marks" (
 	"who_put_user" integer NOT NULL REFERENCES "users" ("id"),
 	"who_was_put_user" integer NOT NULL REFERENCES "users" ("id"),
 	"date" timestamp NOT NULL
+);
+
+CREATE TABLE "user_groups"(
+  "user_id" integer NOT NULL REFERENCES "users" ("id"),
+  "group_id" integer NOT NULL REFERENCES "groups" ("id")
 );
 
 insert into roles("id", "name") values (1, 'teacher'),(2, 'student'),(3, 'admin')

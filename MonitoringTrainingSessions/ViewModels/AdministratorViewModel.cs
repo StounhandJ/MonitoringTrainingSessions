@@ -15,7 +15,10 @@ public class AdministratorViewModel : BaseViewModel
         Groups = new ObservableCollection<Group>(Group.getAll());
         DoubleClickCommand = new DelegateCommand((o) =>
         {
-            DataContext.Content = new CahngeUserPage((User)o, new AdministratorPage() { DataContext = this }, DataContext);
+            DataContext.Content = new CahngeUserPage((User)o, new AdministratorPage() { DataContext = this }, DataContext)
+            {
+                DataContext = new CahngeUserViewModel((User)o, new AdministratorPage() { DataContext = this }, DataContext)
+            };
         });
     }
 

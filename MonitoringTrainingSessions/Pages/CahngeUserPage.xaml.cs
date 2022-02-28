@@ -8,8 +8,9 @@ public partial class CahngeUserPage : Page
 {
     public CahngeUserPage(User user, Page page, MainViewModel dataContext)
     {
+        // DataContext = new CahngeUserViewModel(user, page, dataContext);
         InitializeComponent();
-        DataContext = new CahngeUserViewModel(user, page, dataContext);
+        
     }
 
     public CahngeUserPage()

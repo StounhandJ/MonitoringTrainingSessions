@@ -44,7 +44,6 @@ public class CahngeUserViewModel : BaseViewModel
         set
         {
             _user = value;
-            Role = Role.getById(3);
             this.OnPropertyChanged(nameof(User));
         }
     }

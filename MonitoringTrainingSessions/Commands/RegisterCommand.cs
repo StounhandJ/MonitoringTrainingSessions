@@ -39,11 +39,7 @@ public class RegisterCommand : ICommand
             return;
         }
 
-        string surname = m_viewModel.FIO.Split(' ')[0];
-        string name = m_viewModel.FIO.Split(' ')[1];
-        string patronymic = m_viewModel.FIO.Split(' ')[2];
-
-        User user = new User(m_viewModel.Login, password, surname, name, patronymic, m_viewModel.Role, m_viewModel.Group);
+        User user = new User(m_viewModel.Login, password, m_viewModel.FIO, m_viewModel.Role);
         user.save();
         m_viewModel.DataContext.User = user;
     }
