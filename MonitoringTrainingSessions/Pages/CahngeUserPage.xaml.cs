@@ -49,6 +49,7 @@ public partial class CahngeUserPage : Page
         this.user.FIO = FIOTextBox.Text;
         this.user.Role = (Role)RoleComboBox.SelectedItem;
         this.user.Groups = (List<Group>)GroupsCheckComboBox.SelectedItemsOverride;
+        this.user.save();
         
         dataContext.Content = page;
     }

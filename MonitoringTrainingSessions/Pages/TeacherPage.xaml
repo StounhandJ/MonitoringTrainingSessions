@@ -13,6 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="3*"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
         
         <StackPanel Orientation="Horizontal">
@@ -41,24 +42,31 @@
                       x:Name="GroupMarksComboBox"
                       SelectionChanged="GroupMarksComboBox_OnSelectionChanged"
                       DisplayMemberPath="name" />
+                      
             <ComboBox SelectedIndex="0" Width="100" Height="40"
                       HorizontalAlignment="Left" Background="#37b09c"
                       x:Name="StudentComboBox"
+                      SelectionChanged="StudentComboBox_OnSelectionChanged"
                       />
             
             <ComboBox SelectedIndex="0" Height="40"
                       HorizontalAlignment="Left" Background="#37b09c"
                       x:Name="SessionMarkComboBox"
+                      SelectionChanged="SessionMarkComboBox_OnSelectionChanged"
                       DisplayMemberPath="name" />
+            
+            <DatePicker x:Name="DatePicker" SelectedDateChanged="DatePicker_OnSelectedDateChanged"/>
             
             <ComboBox SelectedIndex="0" Height="40"
                       HorizontalAlignment="Left" Background="#37b09c"
-                      x:Name="MarksComboBox"
-                      DisplayMemberPath="name" />
-            
-            <DatePicker x:Name="DatePicker"/>
+                      SelectionChanged="MarksComboBox_OnSelectionChanged"
+                      x:Name="MarksComboBox"/>
 
             <Button Click="SaveMarkButton_OnClick" x:Name="SaveMarkButton" FontSize="18" Content="Сохранить" />
         </StackPanel>
+        <Button Grid.Row="2" Padding="5" Width="170" Height="35" Content="Выйти"
+                Click="ButtonBase_OnClick"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                FontSize="15" Background="#45edd1" />
     </Grid>
 </Page>

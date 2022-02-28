@@ -26,7 +26,7 @@ public class MainViewModel : BaseViewModel
                         this.Content = new Page();
                         break;
                     case Role.TEACHER:
-                        this.Content = new TeacherPage(User);
+                        this.Content = new TeacherPage(User, this);
                         break;
                     case Role.ADMIN:
                         this.Content = new AdministratorPage()
