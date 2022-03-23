@@ -15,6 +15,8 @@ public class Schedule: Model<Schedule>
     private int group_id { get; set; }
     
     public int number_day_week { get; set; }
+    
+    public int number_pair { get; set; }
 
     [Additional]
     public int Id

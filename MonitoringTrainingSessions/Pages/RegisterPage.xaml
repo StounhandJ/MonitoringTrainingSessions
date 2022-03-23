@@ -36,8 +36,6 @@
                    VerticalAlignment="Center" FontSize="20" />
         <TextBlock Grid.Row="4" Grid.Column="0" Text="Должность: " HorizontalAlignment="Center"
                    VerticalAlignment="Center" FontSize="20" />
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="Группа: " HorizontalAlignment="Center"
-                   VerticalAlignment="Center" FontSize="20" />
 
         <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding FIO}" VerticalAlignment="Center" FontSize="15"
                  Width="200" Height="40" HorizontalAlignment="Left" />

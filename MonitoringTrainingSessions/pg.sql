@@ -27,7 +27,8 @@ CREATE TABLE "schedule" (
 	"id" serial NOT NULL PRIMARY KEY,
 	"session_id" integer NOT NULL REFERENCES "sessions" ("id"),
 	"group_id" integer NOT NULL REFERENCES "groups" ("id"),
-	"number_day_week" smallint NOT NULL
+	"number_day_week" smallint NOT NULL,
+	"number_pair" smallint NOT NULL
 );
 
 CREATE TABLE "marks" (

@@ -30,7 +30,7 @@
 
         <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" CanUserDeleteRows="False" IsReadOnly="True"
                   CanUserAddRows="False" SelectionMode="Single" SelectedItem="{Binding SelectedUser}"
-                  AutoGenerateColumns="False" ItemsSource="{Binding Users, Mode=OneWay}">
+                  AutoGenerateColumns="False" ItemsSource="{Binding Users, Mode=OneWay}" VerticalScrollBarVisibility="Auto">
             <DataGrid.InputBindings>
                 <MouseBinding
                     MouseAction="LeftDoubleClick"

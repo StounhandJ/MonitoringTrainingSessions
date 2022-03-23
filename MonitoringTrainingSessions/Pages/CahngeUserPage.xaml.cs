@@ -8,11 +8,10 @@ namespace MonitoringTrainingSessions.Pages;
 
 public partial class CahngeUserPage : Page
 {
-
     private User user;
     private Page page;
     private MainViewModel dataContext;
-    
+
     public CahngeUserPage(User user, Page page, MainViewModel dataContext)
     {
         InitializeComponent();
@@ -31,7 +30,7 @@ public partial class CahngeUserPage : Page
     public CahngeUserPage()
     {
     }
-    
+
 
     private void SaveButton_OnClick(object sender, RoutedEventArgs e)
     {
@@ -49,8 +48,14 @@ public partial class CahngeUserPage : Page
         this.user.FIO = FIOTextBox.Text;
         this.user.Role = (Role)RoleComboBox.SelectedItem;
         this.user.Groups = (List<Group>)GroupsCheckComboBox.SelectedItemsOverride;
+
+        if (PasswordTextBox.Text != "")
+        {
+            this.user.password = PasswordTextBox.Text;
+        }
+
         this.user.save();
-        
+
         dataContext.Content = page;
     }
 

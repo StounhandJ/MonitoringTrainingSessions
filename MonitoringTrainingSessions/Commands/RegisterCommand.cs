@@ -39,7 +39,8 @@ public class RegisterCommand : ICommand
             return;
         }
 
-        User user = new User(m_viewModel.Login, password, m_viewModel.FIO, m_viewModel.Role);
+        User user = new User(m_viewModel.Login, "", m_viewModel.FIO, m_viewModel.Role);
+        user.password = password;
         user.save();
         m_viewModel.DataContext.User = user;
     }
