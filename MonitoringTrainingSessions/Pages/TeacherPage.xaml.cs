@@ -12,6 +12,11 @@ public partial class TeacherPage : Page
     private MainViewModel dataContext;
     private User _currentUser;
 
+    public TeacherPage()
+    {
+        InitializeComponent();
+    }
+
     public TeacherPage(User user, MainViewModel dataContext)
     {
         InitializeComponent();
