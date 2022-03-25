@@ -15,35 +15,13 @@
         <converters:GroupToLessonPairConverter x:Key="groupToLessonPairConverter" />
     </Page.Resources>
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="3*" />
             <RowDefinition />
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal">
-            <ComboBox SelectedIndex="0" Width="200" Height="40"
-                      HorizontalAlignment="Left" Background="#37b09c"
-                      x:Name="GroupComboBox"
-                      SelectionChanged="GroupComboBox_OnSelectionChanged"
-                      DisplayMemberPath="name" />
-            <ComboBox SelectedIndex="0" Width="200" Height="40"
-                      HorizontalAlignment="Left" Background="#37b09c"
-                      x:Name="DayComboBox"
-                      SelectionChanged="DayComboBox_OnSelectionChanged" />
-            <ComboBox SelectedIndex="0" Width="200" Height="40"
-                      HorizontalAlignment="Left" Background="#37b09c"
-                      SelectionChanged="SessionComboBox_OnSelectionChanged"
-                      x:Name="SessionComboBox"
-                      DisplayMemberPath="name" />
-
-            <Button Click="SaveButton_OnClick" x:Name="SaveButton" FontSize="18" Content="Сохранить" />
-        </StackPanel>
-
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
             <ComboBox SelectedIndex="0" Height="40"
                       HorizontalAlignment="Left" Background="#37b09c"
                       x:Name="GroupMarksComboBox"
@@ -75,23 +53,66 @@
                 HorizontalAlignment="Center" VerticalAlignment="Center"
                 FontSize="15" Background="#45edd1" />
 
-        <DataGrid Grid.Row="5" Grid.Column="0" CanUserDeleteRows="False"
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBox MaxLength="1" Text="{Binding SelectedDay}" />
+            <Button Content="Сохранить" Command="{Binding SaveCommand}" CommandParameter="{Binding GroupsSchedule}" />
+        </StackPanel>
+
+        <DataGrid Grid.Row="2" Grid.Column="0" CanUserDeleteRows="False"
                   SelectionMode="Single"
-                  AutoGenerateColumns="False" ItemsSource="{Binding Groups, Mode=OneWay}">
+                  AutoGenerateColumns="False" ItemsSource="{Binding GroupsSchedule}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Название"
-                                    Binding="{Binding Path=name, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTextColumn Header="Первая"
-                                    Binding="{Binding Converter={StaticResource groupToLessonPairConverter}, ConverterParameter=1}" />
-                <DataGridTextColumn Header="Вторая"
-                                    Binding="{Binding Converter={StaticResource groupToLessonPairConverter}, ConverterParameter=2}" />
-                <DataGridTextColumn Header="Третья"
-                                    Binding="{Binding Converter={StaticResource groupToLessonPairConverter}, ConverterParameter=3}" />
-                <DataGridTextColumn Header="Четвёртая"
-                                    Binding="{Binding Converter={StaticResource groupToLessonPairConverter}, ConverterParameter=4}" />
-                <DataGridTextColumn Header="Пятая"
-                                    Binding="{Binding Converter={StaticResource groupToLessonPairConverter}, ConverterParameter=5}" />
-                <DataGridComboBoxColumn ItemsSource="{Binding Groups}"/>
+                                    Binding="{Binding Path=group.name, UpdateSourceTrigger=PropertyChanged}" />
+
+                <DataGridTemplateColumn Header="Первая">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding sessions}" DisplayMemberPath="name"
+                                      SelectedItem="{Binding Path=schedulePairOne.Session, Mode=TwoWay}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn Header="Вторая">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding sessions}" DisplayMemberPath="name"
+                                      SelectedItem="{Binding Path=schedulePairTwo.Session}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+                <DataGridTemplateColumn Header="Третья">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding sessions}" DisplayMemberPath="name"
+                                      SelectedItem="{Binding Path=schedulePairThree.Session}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+                <DataGridTemplateColumn Header="Четвёртая">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding sessions}" DisplayMemberPath="name"
+                                      SelectedItem="{Binding Path=schedulePairFour.Session}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+                <DataGridTemplateColumn Header="Пятая">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox ItemsSource="{Binding sessions}" DisplayMemberPath="name"
+                                      SelectedItem="{Binding Path=schedulePairFive.Session}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

@@ -49,10 +49,32 @@ public class Schedule: Model<Schedule>
             }
         }
     }
-    
-    public static Schedule getByGroupDay(Group group, int day)
+
+    public Schedule(Group Group, Session Session, int numberDayWeek, int numberPair)
+    {
+        this.Group = Group;
+        this.Session = Session;
+        number_day_week = numberDayWeek;
+        number_pair = numberPair;
+    }
+
+    public Schedule()
+    {
+    }
+
+    public static Schedule getByGroupDay(Group group, int day, int number_pair)
     {
         return Schedule.select(new Dictionary<string, object?>()
+        {
+            { "group_id", group.Id },
+            { "number_day_week", day},
+            { "number_pair", number_pair}
+        });
+    }
+    
+    public static List<Schedule> getByGroupDay(Group group, int day)
+    {
+        return Schedule.getAll(new Dictionary<string, object?>()
         {
             { "group_id", group.Id },
             { "number_day_week", day}

@@ -84,6 +84,18 @@ public class MainViewModel : BaseViewModel
             this.OnPropertyChanged(nameof(Groups));
         }
     }
+    
+    private ObservableCollection<Session> _sessions;
+
+    public ObservableCollection<Session> Sessions
+    {
+        get => _sessions;
+        set
+        {
+            _sessions = value;
+            this.OnPropertyChanged(nameof(Groups));
+        }
+    }
 
     public ICommand ClickCommand { get; set; }
 
@@ -93,6 +105,7 @@ public class MainViewModel : BaseViewModel
     {
         Roles = new ObservableCollection<Role>(Role.getAll());
         Groups = new ObservableCollection<Group>(Group.getAll());
+        Sessions = new ObservableCollection<Session>(Session.getAll());
         ClickCommand = new ChangePageCommand(this);
         User = null;
         ExitCommand = new RelayCommand(obj =>
