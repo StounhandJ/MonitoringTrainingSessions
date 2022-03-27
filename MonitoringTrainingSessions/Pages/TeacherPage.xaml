@@ -29,7 +29,7 @@
             <ColumnDefinition Width="0.2*" />
         </Grid.ColumnDefinitions>
         <Button Grid.Row="0" Grid.Column="1" Command="{Binding DataContext.ClickCommand}"
-                CommandParameter="AuthorizationPage" Width="100" Height="35" Name="ButtonReg"
+                CommandParameter="AuthorizationPage" Width="100" Height="35"
                 Content="Выход" HorizontalAlignment="Center" VerticalAlignment="Center"
                 FontSize="15"
                 Background="#45edd1" />
