@@ -103,4 +103,13 @@ public class Mark: Model<Mark>
             { "date", date}
         }, "JOIN user_groups ON user_groups.user_id = marks.who_was_put_user");
     }
+    
+    public static List<Mark> getByUserDate(User who_was_put_user, DateTime date)
+    {
+        return Mark.selectAll(new Dictionary<string, object?>()
+        {
+            { "who_was_put_user", who_was_put_user.Id },
+            { "date", date}
+        });
+    }
 }

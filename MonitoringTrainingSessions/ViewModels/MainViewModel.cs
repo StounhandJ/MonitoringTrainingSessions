@@ -23,7 +23,7 @@ public class MainViewModel : BaseViewModel
                 switch (value.Role.Id)
                 {
                     case Role.STUDENT:
-                        this.Content = new Page();
+                        ClickCommand.Execute("StudentPage");
                         break;
                     case Role.TEACHER:
                         ClickCommand.Execute("TeacherPage");

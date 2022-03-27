@@ -16,6 +16,7 @@ public class TeacherViewModel : BaseViewModel
     {
         SaveCommand = new SaveMarksCommand();
         Marks = new ObservableCollection<Mark>();
+        SelectedDate = DateTime.Now;
     }
 
     private MainViewModel _dataContext;

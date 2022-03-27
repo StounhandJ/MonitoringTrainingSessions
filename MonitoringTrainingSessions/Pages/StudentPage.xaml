@@ -1,0 +1,50 @@
+﻿<Page x:Class="MonitoringTrainingSessions.Pages.StudentPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:MonitoringTrainingSessions.Pages"
+      xmlns:converters="clr-namespace:MonitoringTrainingSessions.Converters"
+      xmlns:viewModels="clr-namespace:MonitoringTrainingSessions.ViewModels"
+      mc:Ignorable="d"
+      Title="StudentPage" Height="450" Width="800">
+    <Page.DataContext>
+        <viewModels:StudentViewModel />
+    </Page.DataContext>
+    <Page.Resources>
+        <converters:GroupToLessonPairConverter x:Key="groupToLessonPairConverter" />
+        <converters:EnumerableNullReplaceConverter x:Key="enumerableNullReplaceConverter" />
+        <converters:NullReplaceConverter x:Key="nullReplaceConverter" />
+    </Page.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="5*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="0.2*" />
+        </Grid.ColumnDefinitions>
+        <Button Grid.Row="0" Grid.Column="1" Command="{Binding DataContext.ClickCommand}"
+                CommandParameter="AuthorizationPage" Width="100" Height="35" Name="ButtonReg"
+                Content="Выход" HorizontalAlignment="Center" VerticalAlignment="Center"
+                FontSize="15"
+                Background="#45edd1" />
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="10">
+            <DatePicker SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0" />
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" CanUserDeleteRows="False"
+                  SelectionMode="Single" CanUserAddRows="False" IsReadOnly="True"
+                  AutoGenerateColumns="False" ItemsSource="{Binding Marks}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Предмет"
+                                    Binding="{Binding Path=Session.name}" />
+                <DataGridTextColumn Header="Оценка"
+                                    Binding="{Binding Path=mark}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+    </Grid>
+</Page>
