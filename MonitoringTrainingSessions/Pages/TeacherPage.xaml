@@ -6,6 +6,9 @@
       xmlns:local="clr-namespace:MonitoringTrainingSessions.Pages"
       xmlns:viewModels="clr-namespace:MonitoringTrainingSessions.ViewModels"
       xmlns:converters="clr-namespace:MonitoringTrainingSessions.Converters"
+      xmlns:system="clr-namespace:System;assembly=System.Runtime"
+      xmlns:attacheds="clr-namespace:MonitoringTrainingSessions.Attacheds"
+      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
       mc:Ignorable="d"
       Title="TeacherPage" Height="450" Width="800">
     <Page.DataContext>
@@ -13,46 +16,59 @@
     </Page.DataContext>
     <Page.Resources>
         <converters:GroupToLessonPairConverter x:Key="groupToLessonPairConverter" />
+        <converters:EnumerableNullReplaceConverter x:Key="enumerableNullReplaceConverter" />
+        <converters:NullReplaceConverter x:Key="nullReplaceConverter" />
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="3*" />
-            <RowDefinition />
+            <RowDefinition Height="5*" />
         </Grid.RowDefinitions>
-
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            <ComboBox SelectedIndex="0" Height="40"
-                      HorizontalAlignment="Left" Background="#37b09c"
-                      x:Name="GroupMarksComboBox"
-                      SelectionChanged="GroupMarksComboBox_OnSelectionChanged"
-                      DisplayMemberPath="name" />
-
-            <ComboBox SelectedIndex="0" Width="100" Height="40"
-                      HorizontalAlignment="Left" Background="#37b09c"
-                      x:Name="StudentComboBox"
-                      SelectionChanged="StudentComboBox_OnSelectionChanged" />
-
-            <ComboBox SelectedIndex="0" Height="40"
-                      HorizontalAlignment="Left" Background="#37b09c"
-                      x:Name="SessionMarkComboBox"
-                      SelectionChanged="SessionMarkComboBox_OnSelectionChanged"
-                      DisplayMemberPath="name" />
-
-            <DatePicker x:Name="DatePicker" SelectedDateChanged="DatePicker_OnSelectedDateChanged" />
-
-            <ComboBox SelectedIndex="0" Height="40"
-                      HorizontalAlignment="Left" Background="#37b09c"
-                      SelectionChanged="MarksComboBox_OnSelectionChanged"
-                      x:Name="MarksComboBox" />
-
-            <Button Click="SaveMarkButton_OnClick" x:Name="SaveMarkButton" FontSize="18" Content="Сохранить" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition Width="0.2*" />
+        </Grid.ColumnDefinitions>
+        <Button Grid.Row="0" Grid.Column="1" Command="{Binding DataContext.ClickCommand}"
+                CommandParameter="AuthorizationPage" Width="100" Height="35" Name="ButtonReg"
+                Content="Выход" HorizontalAlignment="Center" VerticalAlignment="Center"
+                FontSize="15"
+                Background="#45edd1" />
+        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="10">
+            <ComboBox Width="150" Margin="0 0 10 0" ItemsSource="{Binding DataContext.User.Groups}"
+                      SelectedItem="{Binding SelectedGroup, UpdateSourceTrigger=PropertyChanged}" />
+            <ComboBox Width="150" Margin="0 0 10 0" ItemsSource="{Binding DataContext.Sessions}"
+                      SelectedItem="{Binding SelectedSession, UpdateSourceTrigger=PropertyChanged}" />
+            <DatePicker SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged}" Margin="0 0 10 0" />
+            <Button Content="Сохранить" Command="{Binding SaveCommand}" CommandParameter="{Binding Marks}" />
         </StackPanel>
-        <Button Grid.Row="2" Padding="5" Width="170" Height="35" Content="Выйти"
-                Click="ButtonBase_OnClick"
-                HorizontalAlignment="Center" VerticalAlignment="Center"
-                FontSize="15" Background="#45edd1" />
 
-        
+        <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" CanUserDeleteRows="False"
+                  SelectionMode="Single" CanUserAddRows="False"
+                  AutoGenerateColumns="False" ItemsSource="{Binding Marks}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Студент"
+                                    Binding="{Binding Path=whoWasPutUser.name}" />
+
+                <DataGridTemplateColumn Header="Оценка">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ComboBox
+                                ItemsSource="{Binding marks, Converter={StaticResource enumerableNullReplaceConverter}, ConverterParameter=''}"
+                                SelectedItem="{Binding Path=mark, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource nullReplaceConverter}, ConverterParameter=''}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding ., TargetNullValue=''}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+
+            </DataGrid.Columns>
+        </DataGrid>
+
+
     </Grid>
 </Page>

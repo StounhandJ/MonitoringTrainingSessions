@@ -30,4 +30,9 @@ public class Session: Model<Session>
             return false;
         return Session.Equals(this, objA);
     }
+    
+    public override string ToString()
+    {
+        return this.name;
+    }
 }

@@ -34,7 +34,7 @@
         </StackPanel>
 
         <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" CanUserDeleteRows="False"
-                  SelectionMode="Single"
+                  SelectionMode="Single" CanUserAddRows="False"
                   AutoGenerateColumns="False" ItemsSource="{Binding GroupsSchedule}">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Группа"

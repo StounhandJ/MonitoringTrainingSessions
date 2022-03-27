@@ -75,7 +75,7 @@ public class User : Model<User>
     {
         get
         {
-            return UserGroups.getAll(new Dictionary<string, object?>() { { "user_id", id } })
+            return UserGroups.selectAll(new Dictionary<string, object?>() { { "user_id", id } })
                 .ConvertAll(userGroups => userGroups.Group);
         }
         set

@@ -18,11 +18,11 @@ abstract public class Model<T> : IModel
 
     protected abstract string tableName { get; }
 
-    public static List<T> getAll(Dictionary<string, object?>? data = null)
+    public static List<T> selectAll(Dictionary<string, object?>? data = null, string? dopSql = null)
     {
         T? model = Model<T>.constrct();
 
-        return model.@selectAll(data).ConvertAll(input => (T)input);
+        return model.getAll(data, dopSql).ConvertAll(input => (T)input);
     }
 
     public static T getById(int id)
@@ -69,7 +69,7 @@ abstract public class Model<T> : IModel
         }
     }
 
-    public List<object> selectAll(Dictionary<string, object?>? data, string? dopSql = null)
+    public List<object> getAll(Dictionary<string, object?>? data, string? dopSql = null)
     {
         string sql = string.Format("select * from \"{0}\" ", this.getTableName());
 
@@ -122,7 +122,7 @@ abstract public class Model<T> : IModel
             }
         }
 
-        
+
         string sql;
         if (this.exist())
         {
@@ -160,7 +160,7 @@ abstract public class Model<T> : IModel
         {
             Dictionary<string, object?> dataDelete = new Dictionary<string, object?>()
                 { { "id", this.getId()?.GetValue(this)! } };
-            if (data!=null)
+            if (data != null)
             {
                 dataDelete = data;
             }
@@ -169,7 +169,8 @@ abstract public class Model<T> : IModel
                 this.getId()!.SetValue(this, -1);
             }
 
-            string sql = string.Format("delete from \"{0}\" where {1}", this.getTableName(), generateParametrsWhere(dataDelete));
+            string sql = string.Format("delete from \"{0}\" where {1}", this.getTableName(),
+                generateParametrsWhere(dataDelete));
 
             _dbConnector.execute(sql, dataDelete);
         }
@@ -197,7 +198,13 @@ abstract public class Model<T> : IModel
             PropertyInfo? property = this.getProperty(parametr.Key);
             if (property != null)
             {
-                property.SetValue(this, parametr.Value);
+                var t = Nullable.GetUnderlyingType(property.PropertyType) ??
+                        property.PropertyType;
+                var safeValue = Convert.ChangeType(parametr.Value, t);
+                property.SetValue(this, safeValue);
+                // property.SetValue(this, parametr.Value);
+                // new System.Nulla
+                // property.SetValue(this, parametr.Value);
             }
         }
     }
@@ -290,7 +297,7 @@ abstract public class Model<T> : IModel
     {
         return property.CustomAttributes.First(a => a.AttributeType.Equals(attribute));
     }
-    
+
     private bool isSetCustomAttribute(Type attribute)
     {
         return this.GetType().CustomAttributes.Any(a => a.AttributeType.Equals(attribute));

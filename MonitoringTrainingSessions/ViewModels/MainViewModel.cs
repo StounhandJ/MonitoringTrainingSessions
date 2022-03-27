@@ -97,9 +97,9 @@ public class MainViewModel : BaseViewModel
 
     public MainViewModel()
     {
-        Roles = new ObservableCollection<Role>(Role.getAll());
-        Groups = new ObservableCollection<Group>(Group.getAll());
-        Sessions = new ObservableCollection<Session>(Session.getAll());
+        Roles = new ObservableCollection<Role>(Role.selectAll());
+        Groups = new ObservableCollection<Group>(Group.selectAll());
+        Sessions = new ObservableCollection<Session>(Session.selectAll());
         ClickCommand = new ChangePageCommand(this);
         User = null;
         ExitCommand = new RelayCommand(obj =>

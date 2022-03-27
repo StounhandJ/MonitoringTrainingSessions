@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 using MonitoringTrainingSessions.Commands;
 using MonitoringTrainingSessions.Models;
@@ -12,32 +14,8 @@ public class TeacherViewModel : BaseViewModel
 
     public TeacherViewModel()
     {
-        SaveCommand = new SaveGroupsScheduleCommand();
-    }
-
-    private ObservableCollection<GroupSchedule> _groupsSchedule = new ObservableCollection<GroupSchedule>();
-
-    public ObservableCollection<GroupSchedule> GroupsSchedule
-    {
-        get => _groupsSchedule;
-        set
-        {
-            _groupsSchedule = value;
-            this.OnPropertyChanged(nameof(GroupsSchedule));
-        }
-    }
-
-    private List<Group> _groups;
-
-    public List<Group> Groups
-    {
-        get => _groups;
-        set
-        {
-            _groups = value;
-            SelectedDay = 1;
-            this.OnPropertyChanged(nameof(Groups));
-        }
+        SaveCommand = new SaveMarksCommand();
+        Marks = new ObservableCollection<Mark>();
     }
 
     private MainViewModel _dataContext;
@@ -48,28 +26,86 @@ public class TeacherViewModel : BaseViewModel
         set
         {
             _dataContext = value;
-            Groups = _dataContext.User?.Groups;
+            SelectedGroup = value.Groups.First();
+            SelectedSession = value.Sessions.First();
             this.OnPropertyChanged(nameof(DataContext));
         }
     }
 
-    private int _selectedDay;
+    private Group _selectedGroup = new Group();
 
-    public int SelectedDay
+    public Group SelectedGroup
     {
-        get => _selectedDay;
+        get => _selectedGroup;
         set
         {
-            _selectedDay = value;
+            _selectedGroup = value;
+            update();
+            this.OnPropertyChanged(nameof(SelectedGroup));
+        }
+    }
 
-            GroupsSchedule.Clear();
-            foreach (var group in Groups)
+    private Session _selectedSession = new Session();
+
+    public Session SelectedSession
+    {
+        get => _selectedSession;
+        set
+        {
+            _selectedSession = value;
+            update();
+            this.OnPropertyChanged(nameof(SelectedSession));
+        }
+    }
+
+    private DateTime? _selectedDate;
+
+    public DateTime? SelectedDate
+    {
+        get => _selectedDate;
+        set
+        {
+            _selectedDate = value;
+            update();
+            this.OnPropertyChanged(nameof(SelectedDate));
+        }
+    }
+
+    private ObservableCollection<Mark> _marks;
+
+    public ObservableCollection<Mark> Marks
+    {
+        get => _marks;
+        set
+        {
+            _marks = value;
+            this.OnPropertyChanged(nameof(Marks));
+        }
+    }
+
+    private void update()
+    {
+        if (!SelectedGroup.exist() || !SelectedSession.exist() || SelectedDate == null)
+            return;
+
+        Marks.Clear();
+        foreach (var mark in Mark.getByGroupSessionDate(SelectedGroup, SelectedSession, SelectedDate ?? new DateTime()))
+        {
+            Marks.Add(mark);
+        }
+
+        List<Mark> marks = new List<Mark>(Marks);
+        foreach (var user in SelectedGroup.Users)
+        {
+            if (user.Role.Id == Role.STUDENT && !marks.Exists(m => m.whoWasPutUser.Id == user.Id))
             {
-                GroupsSchedule.Add(new GroupSchedule(group, Schedule.getByGroupDay(group, SelectedDay),
-                    new List<Session>(DataContext.Sessions), SelectedDay));
+                Marks.Add(new Mark(SelectedSession, DataContext.User!, user, null, SelectedDate ?? new DateTime()));
             }
+        }
 
-            this.OnPropertyChanged(nameof(SelectedDay));
+        foreach (var mark in Marks)
+        {
+            mark.marks.Insert(0, null);
         }
     }
 }

@@ -74,7 +74,7 @@ public class Schedule: Model<Schedule>
     
     public static List<Schedule> getByGroupDay(Group group, int day)
     {
-        return Schedule.getAll(new Dictionary<string, object?>()
+        return Schedule.selectAll(new Dictionary<string, object?>()
         {
             { "group_id", group.Id },
             { "number_day_week", day}

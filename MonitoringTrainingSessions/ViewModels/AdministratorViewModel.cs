@@ -10,9 +10,9 @@ public class AdministratorViewModel : BaseViewModel
 {
     public AdministratorViewModel()
     {
-        Users = new ObservableCollection<User>(User.getAll());
-        Sessions = new ObservableCollection<Session>(Session.getAll());
-        Groups = new ObservableCollection<Group>(Group.getAll());
+        Users = new ObservableCollection<User>(User.selectAll());
+        Sessions = new ObservableCollection<Session>(Session.selectAll());
+        Groups = new ObservableCollection<Group>(Group.selectAll());
         DoubleClickCommand = new DelegateCommand((o) =>
         {
             DataContext.Content = new CahngeUserPage((User)o, new AdministratorPage() { DataContext = this }, DataContext);

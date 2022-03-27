@@ -24,7 +24,7 @@ public class Group : Model<Group>
     {
         get
         {
-            return UserGroups.getAll(new Dictionary<string, object?>() { { "group_id", id } })
+            return UserGroups.selectAll(new Dictionary<string, object?>() { { "group_id", id } })
                 .ConvertAll(userGroups => userGroups.User);
         }
         set

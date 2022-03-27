@@ -17,10 +17,15 @@ public class Mark: Model<Mark>
     
     private int who_was_put_user { get; set; }
     
-    public int mark { get; set; }
+    public int? mark { get; set; }
     
     public DateTime date { get; set; }
 
+    [Additional] private List<int?> _marks = new List<int?>() { 2, 3, 4, 5 };
+    
+    [Additional]
+    public List<int?> marks { get=>_marks; set=>_marks=value; }
+    
     [Additional]
     public int Id
     {
@@ -65,7 +70,20 @@ public class Mark: Model<Mark>
             }
         }
     }
-    
+
+    public Mark()
+    {
+    }
+
+    public Mark(Session session, User whoPutUser, User whoWasPutUser, int? mark, DateTime date)
+    {
+        Session = session;
+        this.whoPutUser = whoPutUser;
+        this.whoWasPutUser = whoWasPutUser;
+        this.mark = mark;
+        this.date = date;
+    }
+
     public static Mark getBySessionUserDate(Session session, User whoWasUser, DateTime date)
     {
         return Mark.select(new Dictionary<string, object?>()
@@ -74,5 +92,15 @@ public class Mark: Model<Mark>
             { "who_was_put_user", whoWasUser.Id},
             { "date", date}
         });
+    }
+    
+    public static List<Mark> getByGroupSessionDate(Group group, Session session, DateTime date)
+    {
+        return Mark.selectAll(new Dictionary<string, object?>()
+        {
+            { "session_id", session.Id },
+            { "group_id", group.Id},
+            { "date", date}
+        }, "JOIN user_groups ON user_groups.user_id = marks.who_was_put_user");
     }
 }
