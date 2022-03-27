@@ -43,10 +43,10 @@ public class Schedule: Model<Schedule>
         get => Session.getById(session_id);
         set
         {
-            if (value.exist())
-            {
+            // if (value.exist())
+            // {
                 session_id = value.Id;
-            }
+            // }
         }
     }
 

@@ -18,18 +18,18 @@ public class GroupSchedule
         this.schedules = schedules;
         this.sessions = sessions;
         this.day = day;
+        for (int i = 1; i <= 5; i++)
+        {
+            if (!schedules.Exists(s => s.number_pair == i))
+                schedules.Add(new Schedule(group, new Session(), day, i));
+        }
     }
 
     public Schedule schedulePairOne
     {
         get
         {
-            Schedule? schedule = schedules.Find(s => s.number_pair == 1);
-            if (schedule==null)
-            {
-                schedule = new Schedule(group, new Session(), day, 1);
-            }
-            return schedule;
+            return schedules.Find(s => s.number_pair == 1)!;
         }
         set
         {
@@ -42,12 +42,7 @@ public class GroupSchedule
     {
         get
         {
-            Schedule? schedule = schedules.Find(s => s.number_pair == 2);
-            if (schedule==null)
-            {
-                schedule = new Schedule(group, new Session(), day, 2);
-            }
-            return schedule;
+            return schedules.Find(s => s.number_pair == 2)!;
         }
         set
         {
@@ -60,12 +55,7 @@ public class GroupSchedule
     {
         get
         {
-            Schedule? schedule = schedules.Find(s => s.number_pair == 3);
-            if (schedule==null)
-            {
-                schedule = new Schedule(group, new Session(), day, 3);
-            }
-            return schedule;
+            return schedules.Find(s => s.number_pair == 3)!;
         }
         set
         {
@@ -78,12 +68,7 @@ public class GroupSchedule
     {
         get
         {
-            Schedule? schedule = schedules.Find(s => s.number_pair == 4);
-            if (schedule==null)
-            {
-                schedule = new Schedule(group, new Session(), day, 4);
-            }
-            return schedule;
+            return schedules.Find(s => s.number_pair == 4)!;
         }
         set
         {
@@ -96,12 +81,7 @@ public class GroupSchedule
     {
         get
         {
-            Schedule? schedule = schedules.Find(s => s.number_pair == 5);
-            if (schedule==null)
-            {
-                schedule = new Schedule(group, new Session(), day, 5);
-            }
-            return schedule;
+            return schedules.Find(s => s.number_pair == 5)!;
         }
         set
         {

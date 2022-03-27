@@ -6,14 +6,14 @@ using MonitoringTrainingSessions.Models;
 
 namespace MonitoringTrainingSessions.ViewModels;
 
-public class TeacherViewModel : BaseViewModel
+public class ScheduleViewModel : BaseViewModel
 {
-    public ICommand SaveCommand { get; set; }
-
-    public TeacherViewModel()
+    public ScheduleViewModel()
     {
         SaveCommand = new SaveGroupsScheduleCommand();
     }
+
+    public ICommand SaveCommand { get; set; }
 
     private ObservableCollection<GroupSchedule> _groupsSchedule = new ObservableCollection<GroupSchedule>();
 
@@ -27,19 +27,6 @@ public class TeacherViewModel : BaseViewModel
         }
     }
 
-    private List<Group> _groups;
-
-    public List<Group> Groups
-    {
-        get => _groups;
-        set
-        {
-            _groups = value;
-            SelectedDay = 1;
-            this.OnPropertyChanged(nameof(Groups));
-        }
-    }
-
     private MainViewModel _dataContext;
 
     public MainViewModel DataContext
@@ -48,8 +35,23 @@ public class TeacherViewModel : BaseViewModel
         set
         {
             _dataContext = value;
-            Groups = _dataContext.User?.Groups;
+            Sessions = value.Sessions;
+            SelectedDay = 1;
             this.OnPropertyChanged(nameof(DataContext));
+        }
+    }
+
+    private ObservableCollection<Session> _sessions;
+
+    public ObservableCollection<Session> Sessions
+    {
+        get => _sessions;
+        set
+        {
+            value.Insert(0, new Session());
+            _sessions = value;
+            SelectedDay = 1;
+            this.OnPropertyChanged(nameof(Sessions));
         }
     }
 
@@ -63,10 +65,10 @@ public class TeacherViewModel : BaseViewModel
             _selectedDay = value;
 
             GroupsSchedule.Clear();
-            foreach (var group in Groups)
+            foreach (var group in DataContext.Groups)
             {
                 GroupsSchedule.Add(new GroupSchedule(group, Schedule.getByGroupDay(group, SelectedDay),
-                    new List<Session>(DataContext.Sessions), SelectedDay));
+                    new List<Session>(Sessions), SelectedDay));
             }
 
             this.OnPropertyChanged(nameof(SelectedDay));

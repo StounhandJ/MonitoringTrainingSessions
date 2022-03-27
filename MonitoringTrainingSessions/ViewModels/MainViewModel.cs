@@ -26,16 +26,10 @@ public class MainViewModel : BaseViewModel
                         this.Content = new Page();
                         break;
                     case Role.TEACHER:
-                        this.Content = new TeacherPage()
-                        {
-                            DataContext = new TeacherViewModel() { DataContext = this }
-                        };
+                        ClickCommand.Execute("TeacherPage");
                         break;
                     case Role.ADMIN:
-                        this.Content = new AdministratorPage()
-                        {
-                            DataContext = new AdministratorViewModel() { DataContext = this }
-                        };
+                        ClickCommand.Execute("AdminPage");
                         break;
                 }
             }

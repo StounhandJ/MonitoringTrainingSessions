@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 using MonitoringTrainingSessions.Models;
 
@@ -14,13 +14,20 @@ public class SaveGroupsScheduleCommand : ICommand
 
     public void Execute(object parameter)
     {
-        var groupsSchedule = (List<GroupSchedule>)parameter;
+        var groupsSchedule = (ObservableCollection<GroupSchedule>)parameter;
 
         foreach (var groupSchedule in groupsSchedule)
         {
             foreach (var schedule in groupSchedule.schedules)
             {
-                schedule.save();
+                if (schedule.Session.exist())
+                {
+                    schedule.save();
+                }
+                else if (schedule.exist())
+                {
+                    schedule.delete();
+                }
             }
         }
     }

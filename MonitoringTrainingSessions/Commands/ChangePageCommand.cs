@@ -28,15 +28,30 @@ public class ChangePageCommand : ICommand
                 {
                     DataContext = new RegisterViewModel() { DataContext = m_viewModel }
                 };
-
-
                 break;
             case "AuthorizationPage":
                 m_viewModel.Content = new AuthorizationPage()
                 {
                     DataContext = new AuthorizationViewModel() { DataContext = m_viewModel }
                 };
-
+                break;
+            case "SchedulePage":
+                m_viewModel.Content = new SchedulePage()
+                {
+                    DataContext = new ScheduleViewModel() { DataContext = m_viewModel }
+                };
+                break;
+            case "AdminPage":
+                m_viewModel.Content = new AdministratorPage()
+                {
+                    DataContext = new AdministratorViewModel() { DataContext = m_viewModel }
+                };
+                break;
+            case "TeacherPage":
+                m_viewModel.Content = new TeacherPage()
+                {
+                    DataContext = new TeacherViewModel() { DataContext = m_viewModel }
+                };
                 break;
         }
     }
