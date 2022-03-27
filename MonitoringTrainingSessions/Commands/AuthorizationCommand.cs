@@ -24,12 +24,14 @@ public class AuthorizationCommand : ICommand
     {
         if (string.IsNullOrWhiteSpace(m_viewModel.Login) || m_viewModel.Login.Length > 20)
         {
+            m_viewModel.ErrorText = "Неверный формат логина";
             return;
         }
 
         if (string.IsNullOrWhiteSpace(((PasswordBox)parameter).Password) ||
             ((PasswordBox)parameter).Password.Length > 20)
         {
+            m_viewModel.ErrorText = "Неверный формат пароля";
             return;
         }
 
@@ -37,7 +39,9 @@ public class AuthorizationCommand : ICommand
         if (user.exist())
         {
             m_viewModel.DataContext.User = user;
+            return;
         }
+        m_viewModel.ErrorText = "Неверный логин или пароль";
     }
 
     public event EventHandler CanExecuteChanged;

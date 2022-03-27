@@ -53,6 +53,18 @@ public class RegisterViewModel : BaseViewModel
             this.OnPropertyChanged(nameof(Role));
         }
     }
+    
+    private string _errorText;
+
+    public string ErrorText
+    {
+        get => _errorText;
+        set
+        {
+            _errorText = value;
+            this.OnPropertyChanged(nameof(ErrorText));
+        }
+    }
 
     private MainViewModel _dataContext;
 

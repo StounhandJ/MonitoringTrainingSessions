@@ -36,6 +36,10 @@
         <PasswordBox Grid.Row="2" Grid.Column="1" Name="PasswordBox" VerticalAlignment="Center" FontSize="15"
                      Width="200" Height="40" HorizontalAlignment="Left" Background="#37b09c" />
 
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding ErrorText}" Foreground="Red" HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   FontSize="20" />
+
         <Button Grid.Row="4" Grid.ColumnSpan="2" Grid.Column="0" Command="{Binding AuthorizationCommand}"
                 CommandParameter="{Binding ElementName=PasswordBox}" Width="170" Height="35" Name="ButtonReg"
                 Content="Авторизоваться" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="15"

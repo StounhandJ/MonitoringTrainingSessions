@@ -36,11 +36,13 @@ public partial class CahngeUserPage : Page
     {
         if (string.IsNullOrWhiteSpace(LoginTextBox.Text) || LoginTextBox.Text.Length > 30)
         {
+            ErrorTextBlock.Text = "Неверный логин или пароль";
             return;
         }
 
         if (string.IsNullOrWhiteSpace(FIOTextBox.Text) || FIOTextBox.Text.Split(' ').Length < 2)
         {
+            ErrorTextBlock.Text = "Неверный формат ФИО. Пример: \"Иванов Иван Иванович\" (Отчество не обязательно)";
             return;
         }
 

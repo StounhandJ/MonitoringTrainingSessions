@@ -40,6 +40,18 @@ public class AuthorizationViewModel : BaseViewModel
             this.OnPropertyChanged(nameof(Password));
         }
     }
+    
+    private string _errorText;
+
+    public string ErrorText
+    {
+        get => _errorText;
+        set
+        {
+            _errorText = value;
+            this.OnPropertyChanged(nameof(ErrorText));
+        }
+    }
 
 
     private MainViewModel _dataContext;

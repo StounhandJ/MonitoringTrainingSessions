@@ -39,7 +39,9 @@
             <TextBox FontSize="16" VerticalContentAlignment="Center" Text="Группы: " />
             <xctk:CheckComboBox x:Name="GroupsCheckComboBox" Margin="5"/>
         </StackPanel>
-        
+        <TextBlock Name="ErrorTextBlock" Foreground="Red" HorizontalAlignment="Left"
+                   VerticalAlignment="Center"
+                   FontSize="20" />
         <Button Click="SaveButton_OnClick" x:Name="SaveButton" FontSize="18" Content="Сохранить"/>
         <Button Click="DeleteButton_OnClick" x:Name="DeleteButton" FontSize="18" Content="Удалить"/>
     </StackPanel>

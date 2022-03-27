@@ -26,16 +26,19 @@ public class RegisterCommand : ICommand
         
         if (string.IsNullOrWhiteSpace(m_viewModel.Login) || m_viewModel.Login.Length > 30)
         {
+            m_viewModel.ErrorText = "Неверный формат логин";
             return;
         }
 
         if (string.IsNullOrWhiteSpace(m_viewModel.FIO) || m_viewModel.FIO.Split(' ').Length < 2)
         {
+            m_viewModel.ErrorText = "Неверный формат ФИО. Пример: \"Иванов Иван Иванович\" (Отчество не обязательно)";
             return;
         }
 
         if (string.IsNullOrWhiteSpace(password))
         {
+            m_viewModel.ErrorText = "Неверный формат паролья";
             return;
         }
 
