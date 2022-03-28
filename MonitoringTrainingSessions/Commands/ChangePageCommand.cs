@@ -65,7 +65,7 @@ public class ChangePageCommand : ICommand
                     DataContext = new LessonTeacherViewModel() { DataContext = m_viewModel }
                 };
                 break; 
-            case "LessonStudent":
+            case "LessonStudentPage":
                 m_viewModel.Content = new LessonStudentPage()
                 {
                     DataContext = new LessonStudentViewModel() { DataContext = m_viewModel }

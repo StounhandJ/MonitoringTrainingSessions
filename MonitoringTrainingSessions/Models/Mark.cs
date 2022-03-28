@@ -90,7 +90,7 @@ public class Mark: Model<Mark>
         {
             { "session_id", session.Id },
             { "who_was_put_user", whoWasUser.Id},
-            { "date", date}
+            { "date", date.Date}
         });
     }
     
@@ -100,7 +100,7 @@ public class Mark: Model<Mark>
         {
             { "session_id", session.Id },
             { "group_id", group.Id},
-            { "date", date}
+            { "date", date.Date}
         }, "JOIN user_groups ON user_groups.user_id = marks.who_was_put_user");
     }
     
@@ -109,7 +109,7 @@ public class Mark: Model<Mark>
         return Mark.selectAll(new Dictionary<string, object?>()
         {
             { "who_was_put_user", who_was_put_user.Id },
-            { "date", date}
+            { "date", date.Date}
         });
     }
 }

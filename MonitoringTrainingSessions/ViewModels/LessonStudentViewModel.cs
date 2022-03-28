@@ -18,11 +18,10 @@ public class LessonStudentViewModel : BaseViewModel
         set
         {
             _dataContext = value;
-            
-            Action act = () => { Lesson = Lesson.getOrCreate(value.User!.CurrentSchedule, DateTime.Now); };
-            act.Invoke();
-            
-            Timer.start(act);
+
+            update();
+
+            Timer.start(update);
             this.OnPropertyChanged(nameof(DataContext));
         }
     }
@@ -37,5 +36,23 @@ public class LessonStudentViewModel : BaseViewModel
             _lesson = value;
             this.OnPropertyChanged(nameof(Lesson));
         }
+    }
+
+    private Mark _mark;
+
+    public Mark Mark
+    {
+        get => _mark;
+        set
+        {
+            _mark = value;
+            this.OnPropertyChanged(nameof(Mark));
+        }
+    }
+
+    private void update()
+    {
+        Lesson = Lesson.getOrCreate(DataContext.User!.CurrentSchedule, DateTime.Now);
+        Mark = Mark.getBySessionUserDate(Lesson.Schedule.Session, DataContext.User!, DateTime.Now);
     }
 }
