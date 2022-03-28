@@ -66,7 +66,7 @@ public class TeacherViewModel : BaseViewModel
         get => _selectedDate;
         set
         {
-            _selectedDate = value;
+            _selectedDate = value!.Value.Date;
             update();
             this.OnPropertyChanged(nameof(SelectedDate));
         }

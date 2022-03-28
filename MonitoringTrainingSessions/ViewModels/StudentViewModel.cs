@@ -33,7 +33,7 @@ public class StudentViewModel : BaseViewModel
         get => _selectedDate;
         set
         {
-            _selectedDate = value;
+            _selectedDate = value!.Value.Date;
             if (_selectedDate != null)
             {
                 Marks.Clear();
