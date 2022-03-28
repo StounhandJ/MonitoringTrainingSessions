@@ -1,0 +1,40 @@
+﻿<Page x:Class="MonitoringTrainingSessions.Pages.LessonStudentPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:MonitoringTrainingSessions.Pages"
+      xmlns:viewModels="clr-namespace:MonitoringTrainingSessions.ViewModels"
+      mc:Ignorable="d"
+      Title="LessonStudentPage" Height="450" Width="800">
+    <Page.DataContext>
+        <viewModels:LessonStudentViewModel />
+    </Page.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.25*" />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="0.35*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.3*" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="0.3*" />
+        </Grid.ColumnDefinitions>
+        <Button Grid.Row="0" Grid.Column="0" Command="{Binding DataContext.ClickCommand}"
+                CommandParameter="TeacherPage" Width="80" Height="25"
+                Content="Назад" HorizontalAlignment="Center" VerticalAlignment="Center"
+                FontSize="15"
+                Background="#45edd1" />
+
+        <TextBlock Grid.Row="1" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center" Text="Тема занятия:" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Lesson.topic}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center"
+                   Text="Задание на занятие:" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Margin="5" Text="{Binding Lesson.task}" />
+
+    </Grid>
+</Page>

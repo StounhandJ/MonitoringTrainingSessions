@@ -45,4 +45,13 @@ CREATE TABLE "user_groups"(
   "group_id" integer NOT NULL REFERENCES "groups" ("id")
 );
 
+CREATE TABLE "lesson" (
+	"id" serial NOT NULL PRIMARY KEY,
+	"schedule_id" integer NOT NULL REFERENCES "schedule" ("id"),
+	"topic" VARCHAR(255) NOT NULL,
+	"task" text NOT NULL,
+	"discord_id" VARCHAR(255) NOT NULL,
+	"date" date NOT NULL
+);
+
 insert into roles("id", "name") values (1, 'teacher'),(2, 'student'),(3, 'admin')

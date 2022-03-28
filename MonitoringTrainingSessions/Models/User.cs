@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using MonitoringTrainingSessions.Lib;
 using MonitoringTrainingSessions.Lib.Attributes;
@@ -110,6 +111,16 @@ public class User : Model<User>
                 role_id = value.Id;
             }
         }
+    }
+    
+    [Additional]
+    public Schedule CurrentSchedule
+    {
+        get
+        {
+            return Schedule.getByGroupDay(Groups.First(), (int)DateTime.Now.DayOfWeek, 1);
+        }
+        set { }
     }
 
     public User(string login, string password, string surname, string name, string patronymic, Role role)
