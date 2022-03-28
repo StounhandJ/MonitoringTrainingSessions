@@ -33,7 +33,7 @@
                 Content="Назад" HorizontalAlignment="Center" VerticalAlignment="Center"
                 FontSize="15"
                 Background="#45edd1" />
-        <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Grid.Column="1" Visibility="{Binding Visibility}" VerticalAlignment="Center" Orientation="Horizontal">
             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Пара: " />
             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Lesson.Schedule.Session.name}" />
             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Margin="80 0 0 0" Text="Номер пары: " />
@@ -41,19 +41,23 @@
             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Margin="80 0 0 0" Text="Группа: " />
             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Lesson.Schedule.Group.name}" />
         </StackPanel>
-        <TextBlock Grid.Row="1" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center" Text="Тема занятия:" />
-        <TextBox Grid.Row="1" Grid.Column="1" Margin="5"
+        
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin="5"
+                 Text="Занятия нет" TextAlignment="Center" VerticalAlignment="Center" />
+        
+        <TextBlock Grid.Row="1" Grid.Column="0" Visibility="{Binding Visibility}" TextAlignment="Center" VerticalAlignment="Center" Text="Тема занятия:" />
+        <TextBox Grid.Row="1" Grid.Column="1" Visibility="{Binding Visibility}" Margin="5"
                  Text="{Binding Lesson.topic, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBlock Grid.Row="2" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center"
+        <TextBlock Grid.Row="2" Grid.Column="0" Visibility="{Binding Visibility}" TextAlignment="Center" VerticalAlignment="Center"
                    Text="Задание на занятие:" />
-        <TextBox Grid.Row="2" Grid.Column="1" Margin="5"
+        <TextBox Grid.Row="2" Grid.Column="1" Visibility="{Binding Visibility}" Margin="5"
                  Text="{Binding Lesson.task, UpdateSourceTrigger=PropertyChanged}" />
 
-        <Button Grid.Row="4" Grid.Column="2" Margin="5" Content="Сохранить" Command="{Binding SaveCommand}"
+        <Button Grid.Row="4" Grid.Column="2" Visibility="{Binding Visibility}" Margin="5" Content="Сохранить" Command="{Binding SaveCommand}"
                 CommandParameter="{Binding GroupsSchedule}" />
 
-        <DataGrid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" CanUserDeleteRows="False"
+        <DataGrid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" Visibility="{Binding Visibility}" CanUserDeleteRows="False"
                   SelectionMode="Single" CanUserAddRows="False"
                   AutoGenerateColumns="False" ItemsSource="{Binding Marks}">
             <DataGrid.Columns>

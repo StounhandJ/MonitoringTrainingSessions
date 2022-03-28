@@ -47,7 +47,7 @@ CREATE TABLE "user_groups"(
 
 CREATE TABLE "lesson" (
 	"id" serial NOT NULL PRIMARY KEY,
-	"schedule_id" integer NOT NULL REFERENCES "schedule" ("id"),
+	"schedule_id" integer NOT NULL REFERENCES "schedule" ("id") ON DELETE CASCADE,
 	"topic" VARCHAR(255) NOT NULL,
 	"task" text NOT NULL,
 	"discord_id" VARCHAR(255) NOT NULL,

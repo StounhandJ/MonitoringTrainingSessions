@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using MonitoringTrainingSessions.Lib;
 using MonitoringTrainingSessions.Models;
 
@@ -34,6 +35,7 @@ public class LessonStudentViewModel : BaseViewModel
         set
         {
             _lesson = value;
+            Visibility = value.Schedule.exist() ? Visibility.Visible : Visibility.Hidden; 
             this.OnPropertyChanged(nameof(Lesson));
         }
     }
@@ -48,6 +50,24 @@ public class LessonStudentViewModel : BaseViewModel
             _mark = value;
             this.OnPropertyChanged(nameof(Mark));
         }
+    }
+    
+    private Visibility _visibility = Visibility.Visible;
+
+    public Visibility Visibility
+    {
+        get => _visibility;
+        set
+        {
+            _visibility = value;
+            this.OnPropertyChanged(nameof(Visibility));
+            this.OnPropertyChanged(nameof(NoVisibility));
+        }
+    }
+    
+    public Visibility NoVisibility
+    {
+        get => Visibility == Visibility.Visible ? Visibility.Hidden : Visibility.Visible;
     }
 
     private void update()

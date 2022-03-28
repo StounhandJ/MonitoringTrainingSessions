@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Windows;
 using System.Windows.Input;
 using MonitoringTrainingSessions.Commands;
 using MonitoringTrainingSessions.Commands.DelegateCommand;
@@ -43,6 +44,7 @@ public class LessonTeacherViewModel : BaseViewModel
         set
         {
             _lesson = value;
+            Visibility = value.Schedule.exist() ? Visibility.Visible : Visibility.Hidden; 
             this.OnPropertyChanged(nameof(Lesson));
         }
     }
@@ -56,6 +58,18 @@ public class LessonTeacherViewModel : BaseViewModel
         {
             _marks = value;
             this.OnPropertyChanged(nameof(Marks));
+        }
+    }
+    
+    private Visibility _visibility = Visibility.Visible;
+
+    public Visibility Visibility
+    {
+        get => _visibility;
+        set
+        {
+            _visibility = value;
+            this.OnPropertyChanged(nameof(Visibility));
         }
     }
 

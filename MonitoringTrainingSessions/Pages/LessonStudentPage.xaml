@@ -29,23 +29,26 @@
                 FontSize="15"
                 Background="#45edd1" />
         
-        <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Grid.Column="1" Visibility="{Binding Visibility}" VerticalAlignment="Center" Orientation="Horizontal">
             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Пара: " />
             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Lesson.Schedule.Session.name}" />
             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Margin="100 0 0 0" Text="Номер пары: " />
             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Lesson.Schedule.number_pair}" />
         </StackPanel>
 
-        <TextBlock Grid.Row="1" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center" Text="Тема занятия:" />
-        <TextBlock Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Lesson.topic}" />
-
-        <TextBlock Grid.Row="2" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center"
-                   Text="Задание на занятие:" />
-        <TextBlock Grid.Row="2" Grid.Column="1" Margin="5" Text="{Binding Lesson.task}" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Margin="5" Visibility="{Binding NoVisibility}"
+                 Text="Занятия нет" TextAlignment="Center" VerticalAlignment="Center" />
         
-        <TextBlock Grid.Row="3" Grid.Column="0" TextAlignment="Center" VerticalAlignment="Center"
+        <TextBlock Grid.Row="1" Grid.Column="0" Visibility="{Binding Visibility}" TextAlignment="Center" VerticalAlignment="Center" Text="Тема занятия:" />
+        <TextBlock Grid.Row="1" Grid.Column="1" Visibility="{Binding Visibility}" Margin="5" Text="{Binding Lesson.topic}" />
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Visibility="{Binding Visibility}" TextAlignment="Center" VerticalAlignment="Center"
+                   Text="Задание на занятие:" />
+        <TextBlock Grid.Row="2" Grid.Column="1" Visibility="{Binding Visibility}" Margin="5" Text="{Binding Lesson.task}" />
+        
+        <TextBlock Grid.Row="3" Grid.Column="0" Visibility="{Binding Visibility}" TextAlignment="Center" VerticalAlignment="Center"
                    Text="Оценка за занятие:" />
-        <TextBlock Grid.Row="3" Grid.Column="1" Margin="5" Text="{Binding Mark.mark}" />
+        <TextBlock Grid.Row="3" Grid.Column="1" Visibility="{Binding Visibility}" Margin="5" Text="{Binding Mark.mark}" />
 
     </Grid>
 </Page>
