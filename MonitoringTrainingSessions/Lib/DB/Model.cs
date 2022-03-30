@@ -18,11 +18,11 @@ abstract public class Model<T> : IModel
 
     protected abstract string tableName { get; }
 
-    public static List<T> selectAll(Dictionary<string, object?>? data = null, string? dopSql = null)
+    public static List<T> selectAll(Dictionary<string, object?>? data = null, string? before_where = null, string? after_where = null)
     {
         T? model = Model<T>.constrct();
 
-        return model.getAll(data, dopSql).ConvertAll(input => (T)input);
+        return model.getAll(data, before_where, after_where).ConvertAll(input => (T)input);
     }
 
     public static T getById(int id)
@@ -69,18 +69,23 @@ abstract public class Model<T> : IModel
         }
     }
 
-    public List<object> getAll(Dictionary<string, object?>? data, string? dopSql = null)
+    public List<object> getAll(Dictionary<string, object?>? data, string? before_where = null, string? after_where = null)
     {
         string sql = string.Format("select * from \"{0}\" ", this.getTableName());
 
-        if (dopSql != null)
+        if (before_where != null)
         {
-            sql += string.Format("{0} ", dopSql);
+            sql += string.Format("{0} ", before_where);
         }
 
         if (data != null)
         {
             sql += string.Format("where {0} ", generateParametrsWhere(data));
+        }
+        
+        if (after_where != null)
+        {
+            sql += string.Format("{0}", after_where);
         }
 
         var results = _dbConnector.execute(sql, data);
