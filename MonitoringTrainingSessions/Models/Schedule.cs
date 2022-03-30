@@ -16,7 +16,30 @@ public class Schedule: Model<Schedule>
     
     public int number_day_week { get; set; }
     
-    public int number_pair { get; set; }
+    private int number_pair_id { get; set; }
+    
+    [Additional]
+    public TimeSchedule TimeSchedule
+    {
+        get => TimeSchedule.getById(number_pair_id);
+        set
+        {
+            if (value.exist())
+            {
+                number_pair_id = value.Id;
+            }
+        }
+    }
+
+    [Additional]
+    public int number_pair
+    {
+        get => TimeSchedule.number;
+        set
+        {
+            TimeSchedule = TimeSchedule.getByNumber(value);
+        } 
+    }
 
     [Additional]
     public int Id

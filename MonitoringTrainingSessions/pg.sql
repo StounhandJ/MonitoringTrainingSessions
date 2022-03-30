@@ -33,7 +33,7 @@ CREATE TABLE "schedule"
     "session_id"      integer  NOT NULL REFERENCES "sessions" ("id"),
     "group_id"        integer  NOT NULL REFERENCES "groups" ("id"),
     "number_day_week" smallint NOT NULL,
-    "number_pair"     smallint NOT NULL
+    "number_pair_id"  smallint NOT NULL REFERENCES "time_schedule" ("id")
 );
 
 CREATE TABLE "marks"

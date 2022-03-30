@@ -29,7 +29,7 @@ public class MainViewModel : BaseViewModel
                         ClickCommand.Execute("TeacherPage");
                         break;
                     case Role.ADMIN:
-                        ClickCommand.Execute("TimeSchedulePage");
+                        ClickCommand.Execute("AdminPage");
                         break;
                 }
             }

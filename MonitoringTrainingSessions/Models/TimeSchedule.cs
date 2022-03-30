@@ -26,8 +26,16 @@ public class TimeSchedule : Model<TimeSchedule>
         get => id;
     }
 
+    public static TimeSchedule getByNumber(int number)
+    {
+        return TimeSchedule.select(new Dictionary<string, object?>()
+        {
+            { "number", number }
+        });
+    }
+
     public static List<TimeSchedule> selectAll(Dictionary<string, object?>? data = null)
     {
-        return TimeSchedule.selectAll(data, after_where:"ORDER BY number ASC");
+        return TimeSchedule.selectAll(data, after_where: "ORDER BY number ASC");
     }
 }
