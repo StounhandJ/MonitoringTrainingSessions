@@ -119,7 +119,7 @@ public class TimeScheduleViewModel : BaseViewModel
             return true;
         }
 
-        if (timeSchedule.start_time > timeSchedule.end_time)
+        if (new_start_time > new_end_time)
         {
             ErrorText = "Время начала больше конца";
             return true;

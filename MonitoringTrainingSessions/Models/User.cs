@@ -118,7 +118,11 @@ public class User : Model<User>
     {
         get
         {
-            return Schedule.getByGroupDay(Groups.First(), (int)DateTime.Now.DayOfWeek, 1);
+            TimeSchedule? timeSchedule = TimeSchedule.getCurrentTimeSchedule();
+            if (timeSchedule == null || Groups.Count==0)
+                return new Schedule();
+            
+            return Schedule.getByGroupDay(Groups.First(), (int)DateTime.Now.DayOfWeek, timeSchedule);
         }
         set { }
     }

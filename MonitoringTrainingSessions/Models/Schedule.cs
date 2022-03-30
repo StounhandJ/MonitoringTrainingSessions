@@ -85,13 +85,13 @@ public class Schedule: Model<Schedule>
     {
     }
 
-    public static Schedule getByGroupDay(Group group, int day, int number_pair)
+    public static Schedule getByGroupDay(Group group, int day, TimeSchedule timeSchedule)
     {
         return Schedule.select(new Dictionary<string, object?>()
         {
             { "group_id", group.Id },
             { "number_day_week", day},
-            { "number_pair", number_pair}
+            { "number_pair_id", timeSchedule.Id}
         });
     }
     

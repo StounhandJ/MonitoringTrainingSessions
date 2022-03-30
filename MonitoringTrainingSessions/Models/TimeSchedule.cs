@@ -38,4 +38,19 @@ public class TimeSchedule : Model<TimeSchedule>
     {
         return TimeSchedule.selectAll(data, after_where: "ORDER BY number ASC");
     }
+    
+    public static TimeSchedule? getCurrentTimeSchedule()
+    {
+        List<TimeSchedule> timeSchedules = TimeSchedule.selectAll();
+        TimeSpan timeSpanNow = DateTime.Now.TimeOfDay;
+        foreach (var timeSchedule in timeSchedules)
+        {
+            if (timeSpanNow>=timeSchedule.start_time && timeSpanNow<=timeSchedule.end_time)
+            {
+                return timeSchedule;
+            }
+        }
+
+        return null;
+    }
 }

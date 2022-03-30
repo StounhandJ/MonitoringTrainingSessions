@@ -24,7 +24,7 @@
             <ColumnDefinition Width="0.3*" />
         </Grid.ColumnDefinitions>
         <Button Grid.Row="0" Grid.Column="0" Command="{Binding DataContext.ClickCommand}"
-                CommandParameter="TeacherPage" Width="80" Height="25"
+                CommandParameter="StudentPage" Width="80" Height="25"
                 Content="Назад" HorizontalAlignment="Center" VerticalAlignment="Center"
                 FontSize="15"
                 Background="#45edd1" />
