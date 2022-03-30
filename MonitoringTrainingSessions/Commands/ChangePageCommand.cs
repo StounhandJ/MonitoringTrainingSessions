@@ -64,11 +64,17 @@ public class ChangePageCommand : ICommand
                 {
                     DataContext = new LessonTeacherViewModel() { DataContext = m_viewModel }
                 };
-                break; 
+                break;
             case "LessonStudentPage":
                 m_viewModel.Content = new LessonStudentPage()
                 {
                     DataContext = new LessonStudentViewModel() { DataContext = m_viewModel }
+                };
+                break;
+            case "TimeSchedulePage":
+                m_viewModel.Content = new TimeSchedulePage()
+                {
+                    DataContext = new TimeScheduleViewModel() { DataContext = m_viewModel }
                 };
                 break;
         }

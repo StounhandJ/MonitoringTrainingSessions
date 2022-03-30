@@ -1,0 +1,45 @@
+﻿<Page x:Class="MonitoringTrainingSessions.Pages.TimeSchedulePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:MonitoringTrainingSessions.Pages"
+      xmlns:viewModels="clr-namespace:MonitoringTrainingSessions.ViewModels"
+      xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+      mc:Ignorable="d"
+      Title="TimeSchedulePage" Height="450" Width="800">
+    <Page.DataContext>
+        <viewModels:TimeScheduleViewModel />
+    </Page.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition Height="5*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.2*" />
+            <ColumnDefinition />
+            <ColumnDefinition Width="0.2*" />
+        </Grid.ColumnDefinitions>
+        <Button Grid.Row="0" Grid.Column="0" Command="{Binding DataContext.ClickCommand}"
+                CommandParameter="SchedulePage" Width="100" Height="35"
+                Content="Назад" HorizontalAlignment="Center" VerticalAlignment="Center"
+                FontSize="15"
+                Background="#45edd1" />
+        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" Margin="10">
+            <TextBlock Width="150" Margin="0 0 10 0" TextAlignment="Center" VerticalAlignment="Center"
+                       Text="Номер дня:" />
+            <ComboBox Width="150" Margin="0 0 10 0" Name="DayComboBox"
+                      ItemsSource="{Binding TimeSchedules}" DisplayMemberPath="number"
+                      SelectedItem="{Binding SelectedDay, UpdateSourceTrigger=PropertyChanged}" />
+            <Button Content="Сохранить" Command="{Binding SaveCommand}" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Margin="10">
+            <xctk:TimePicker Width="120" FontSize="20" FormatString="hh:mm" Value="{Binding StartTime}" />
+            <xctk:TimePicker Width="120" FontSize="20" FormatString="hh:mm" Value="{Binding EndTime}" Margin="20 0 0 0"/>
+        </StackPanel>
+        
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding ErrorText}" Foreground="Red" HorizontalAlignment="Center" FontSize="20" />
+    </Grid>
+</Page>
