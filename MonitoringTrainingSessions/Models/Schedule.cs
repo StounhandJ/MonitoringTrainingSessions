@@ -17,16 +17,26 @@ public class Schedule: Model<Schedule>
     public int number_day_week { get; set; }
     
     private int number_pair_id { get; set; }
+
+    [Additional]
+    private TimeSchedule? _timeSchedule;
     
     [Additional]
     public TimeSchedule TimeSchedule
     {
-        get => TimeSchedule.getById(number_pair_id);
+        get
+        {
+            if (_timeSchedule != null)
+                return _timeSchedule;
+            _timeSchedule = TimeSchedule.getById(number_pair_id);
+            return _timeSchedule;
+        }
         set
         {
             if (value.exist())
             {
                 number_pair_id = value.Id;
+                _timeSchedule = value;
             }
         }
     }
@@ -63,7 +73,10 @@ public class Schedule: Model<Schedule>
     [Additional]
     public Session Session
     {
-        get => Session.getById(session_id);
+        get
+        {
+            return session_id==-1? new Session() : Session.getById(session_id);
+        }
         set
         {
             // if (value.exist())
@@ -79,6 +92,14 @@ public class Schedule: Model<Schedule>
         this.Session = Session;
         number_day_week = numberDayWeek;
         number_pair = numberPair;
+    }
+    
+    public Schedule(Group Group, Session Session, int numberDayWeek, TimeSchedule timeSchedule)
+    {
+        this.Group = Group;
+        this.Session = Session;
+        number_day_week = numberDayWeek;
+        TimeSchedule = timeSchedule;
     }
 
     public Schedule()

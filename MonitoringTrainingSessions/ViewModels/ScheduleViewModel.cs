@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using MonitoringTrainingSessions.Commands;
 using MonitoringTrainingSessions.Models;
@@ -67,8 +68,12 @@ public class ScheduleViewModel : BaseViewModel
             GroupsSchedule.Clear();
             foreach (var group in DataContext.Groups)
             {
-                GroupsSchedule.Add(new GroupSchedule(group, Schedule.getByGroupDay(group, SelectedDay),
+                // Task.Run(async () =>
+                // {
+                    GroupsSchedule.Add(new GroupSchedule(group, Schedule.getByGroupDay(group, SelectedDay),
                     new List<Session>(Sessions), SelectedDay));
+                // });
+                
             }
 
             this.OnPropertyChanged(nameof(SelectedDay));
