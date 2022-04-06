@@ -7,6 +7,8 @@ namespace MonitoringTrainingSessions.ViewModels;
 
 public class LessonStudentViewModel : BaseViewModel
 {
+    
+    private static DiscordClient DiscordClient = new DiscordClient(App.DiscordAppId);
     public LessonStudentViewModel()
     {
     }
@@ -35,7 +37,16 @@ public class LessonStudentViewModel : BaseViewModel
         set
         {
             _lesson = value;
-            Visibility = value.Schedule.exist() ? Visibility.Visible : Visibility.Hidden; 
+            if (value.Schedule.exist())
+            {
+                Visibility = Visibility.Visible;
+                DiscordClient.ConnectOrCreateLobbyDiscord(value.discord_id, 50);
+            }
+            else
+            {
+                Visibility = Visibility.Hidden;
+                DiscordClient.LobbySmartDisconnect();
+            }
             this.OnPropertyChanged(nameof(Lesson));
         }
     }
