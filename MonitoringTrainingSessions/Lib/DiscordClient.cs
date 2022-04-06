@@ -45,12 +45,12 @@ namespace MonitoringTrainingSessions.Lib
             this.activityManager.OnActivityJoin += (secret) =>
             {
                 App.LogViewer.log($"Discord - Начало подключение по приглашению secret={secret}", Status.Info);
-                this.ConnectLobby(secret);
-                App.LogViewer.log("Discord - Подключенно к лобби по приглашению", Status.Ok);
-                if (currentLobby != null)
-                {
+                // this.ConnectLobby(secret);
+                // App.LogViewer.log("Discord - Подключенно к лобби по приглашению", Status.Ok);
+                // if (currentLobby != null)
+                // {
                     OnActivityJoin?.Invoke(currentLobby ?? new Lobby());
-                }
+                // }
             };
         }
 
