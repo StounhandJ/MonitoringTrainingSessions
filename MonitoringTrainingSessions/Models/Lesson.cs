@@ -64,12 +64,20 @@ public class Lesson : Model<Lesson>
         return lesson;
     }
 
+    public static Lesson getByDiscordId(string discord_id)
+    {
+        return Lesson.select(new Dictionary<string, object?>()
+        {
+            { "discord_id", discord_id },
+        });
+    }
+
     public void generateDisordId()
     {
         Random random = new Random();
         const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-        this.discord_id = new string(Enumerable.Repeat(chars, 25)
+        this.discord_id = new string(Enumerable.Repeat(chars, 50)
             .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 }

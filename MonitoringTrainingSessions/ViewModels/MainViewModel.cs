@@ -107,5 +107,20 @@ public class MainViewModel : BaseViewModel
             Content = new Page();
             User = null;
         });
+        App.DiscordClient.OnActivityJoin += lobby =>
+        {
+            if (User==null)
+                return;
+
+            switch (User.Role.Id)
+            {
+                case Role.STUDENT:
+                    ClickCommand.Execute("LessonStudentPage");
+                    break;
+                case Role.TEACHER:
+                    ClickCommand.Execute("LessonTeacherPage");
+                    break;
+            }
+        };
     }
 }

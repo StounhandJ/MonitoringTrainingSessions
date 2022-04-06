@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Discord;
+using MonitoringTrainingSessions.Models;
+using User = Discord.User;
 
 namespace MonitoringTrainingSessions.Lib
 {
@@ -17,6 +19,11 @@ namespace MonitoringTrainingSessions.Lib
         private string errorMessage;
         private Thread? discordThread;
         private long clientId;
+        private uint capacity;
+
+        public delegate void ActivityJoinHandler(Lobby currentLobby);
+
+        public event ActivityJoinHandler OnActivityJoin;
 
 
         public DiscordClient(long clientId)
@@ -31,6 +38,20 @@ namespace MonitoringTrainingSessions.Lib
             lobbyManager = client.GetLobbyManager();
             voiceManager = client.GetVoiceManager();
             userManager = client.GetUserManager();
+            lobbyManager.OnMemberUpdate += (lobbyId, userId) =>
+            {
+                this.UpdateActivity(lobbyManager.MemberCount(lobbyId), (int)capacity);
+            };
+            this.activityManager.OnActivityJoin += (secret) =>
+            {
+                App.LogViewer.log($"Discord - Начало подключение по приглашению secret={secret}", Status.Info);
+                this.ConnectLobby(secret);
+                App.LogViewer.log("Discord - Подключенно к лобби по приглашению", Status.Ok);
+                if (currentLobby != null)
+                {
+                    OnActivityJoin?.Invoke(currentLobby ?? new Lobby());
+                }
+            };
         }
 
         private bool connectDiscord()
@@ -116,22 +137,23 @@ namespace MonitoringTrainingSessions.Lib
 
         public void ConnectOrCreateLobbyDiscord(string partyId, uint capacity)
         {
-            this.SearchLobbyByMetadata("leagueLobbyId", partyId, (lobby) =>
+            this.capacity = capacity;
+            this.SearchLobbyByMetadata("monLobbyId", partyId, (lobby) =>
             {
                 App.LogViewer.log("Discord - Лобби найденно, начало подключения", Status.Info);
                 this.ConnectLobby(lobby.Id, lobby.Secret, (lobbyConn) =>
                 {
                     App.LogViewer.log($"Discord - Лобби подключен, id={lobbyConn.Id}", Status.Ok);
-                    this.UpdateActivity(lobbyManager.MemberCount(lobby.Id), (int)capacity);
+                    this.UpdateActivity(lobbyManager.MemberCount(lobby.Id), (int)this.capacity);
                 });
             }, () =>
             {
                 App.LogViewer.log("Discord - Лобби не найденно, начало создания", Status.Info);
-                Dictionary<string, string> metadatas = new Dictionary<string, string> { { "leagueLobbyId", partyId } };
+                Dictionary<string, string> metadatas = new Dictionary<string, string> { { "monLobbyId", partyId } };
                 this.CreateLobby(capacity, LobbyType.Public, metadatas, (lobby) =>
                 {
                     App.LogViewer.log($"Discord - Лобби созданно, id={lobby.Id}", Status.Ok);
-                    this.UpdateActivity(lobbyManager.MemberCount(lobby.Id), (int)capacity);
+                    this.UpdateActivity(lobbyManager.MemberCount(lobby.Id), (int)this.capacity);
                 });
             });
         }
@@ -254,7 +276,7 @@ namespace MonitoringTrainingSessions.Lib
                         break;
                     }
                 }
-                
+
                 DisconnectLobby();
             }
             else if (IsUserOwner())

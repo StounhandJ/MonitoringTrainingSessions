@@ -54,6 +54,11 @@ public class LessonTeacherViewModel : BaseViewModel
             {
                 Visibility = Visibility.Visible;
                 DiscordClient.ConnectOrCreateLobbyDiscord(value.discord_id, 50);
+                
+                if (DiscordClient.IsMute())
+                {
+                    DiscordClient.Mute();
+                }
             }
             else
             {
