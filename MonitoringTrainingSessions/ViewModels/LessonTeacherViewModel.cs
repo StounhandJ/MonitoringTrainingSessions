@@ -22,6 +22,7 @@ public class LessonTeacherViewModel : BaseViewModel
             Lesson.save();
             (new SaveMarksCommand()).Execute(Marks);
         });
+        App.DiscordClient.OnMemberUpdate += count => { MemberCount = count; };
     }
 
     private MainViewModel _dataContext;
@@ -37,6 +38,7 @@ public class LessonTeacherViewModel : BaseViewModel
             {
                 Lesson.save();
             }
+
             updateMarks();
             this.OnPropertyChanged(nameof(DataContext));
         }
@@ -54,7 +56,7 @@ public class LessonTeacherViewModel : BaseViewModel
             {
                 Visibility = Visibility.Visible;
                 DiscordClient.ConnectOrCreateLobbyDiscord(value.discord_id, 50);
-                
+
                 if (DiscordClient.IsMute())
                 {
                     DiscordClient.Mute();
@@ -91,6 +93,18 @@ public class LessonTeacherViewModel : BaseViewModel
         {
             _visibility = value;
             this.OnPropertyChanged(nameof(Visibility));
+        }
+    }
+
+    private int _memberCount;
+
+    public int MemberCount
+    {
+        get => _memberCount;
+        set
+        {
+            _memberCount = value;
+            this.OnPropertyChanged(nameof(MemberCount));
         }
     }
 

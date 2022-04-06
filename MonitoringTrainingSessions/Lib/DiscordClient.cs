@@ -22,8 +22,11 @@ namespace MonitoringTrainingSessions.Lib
         private uint capacity;
 
         public delegate void ActivityJoinHandler(Lobby currentLobby);
+        public delegate void MemberUpdateHandler(int count);
 
         public event ActivityJoinHandler OnActivityJoin;
+        
+        public event MemberUpdateHandler OnMemberUpdate;
 
 
         public DiscordClient(long clientId)
@@ -40,7 +43,9 @@ namespace MonitoringTrainingSessions.Lib
             userManager = client.GetUserManager();
             lobbyManager.OnMemberUpdate += (lobbyId, userId) =>
             {
-                this.UpdateActivity(lobbyManager.MemberCount(lobbyId), (int)capacity);
+                int count = lobbyManager.MemberCount(lobbyId);
+                this.UpdateActivity(count, (int)capacity);
+                OnMemberUpdate?.Invoke(count);
             };
             this.activityManager.OnActivityJoin += (secret) =>
             {

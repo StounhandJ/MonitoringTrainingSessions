@@ -18,6 +18,7 @@ public class LessonStudentViewModel : BaseViewModel
             App.DiscordClient.LobbySmartDisconnect();
             DataContext.ClickCommand.Execute("StudentPage");
         });
+        App.DiscordClient.OnMemberUpdate += count => { MemberCount = count; };
     }
 
     private MainViewModel _dataContext;
@@ -84,6 +85,18 @@ public class LessonStudentViewModel : BaseViewModel
             _visibility = value;
             this.OnPropertyChanged(nameof(Visibility));
             this.OnPropertyChanged(nameof(NoVisibility));
+        }
+    }
+    
+    private int _memberCount;
+
+    public int MemberCount
+    {
+        get => _memberCount;
+        set
+        {
+            _memberCount = value;
+            this.OnPropertyChanged(nameof(MemberCount));
         }
     }
     
