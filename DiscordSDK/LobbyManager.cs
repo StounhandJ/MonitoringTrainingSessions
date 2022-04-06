@@ -1,23 +1,26 @@
+using System;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
 using System.Text;
 
-namespace DiscordSDK;
-
-public partial class LobbyManager
+namespace Discord
 {
-    public IEnumerable<User> GetMemberUsers(Int64 lobbyID)
+    public partial class LobbyManager
     {
-        var memberCount = MemberCount(lobbyID);
-        var members = new List<User>();
-        for (var i = 0; i < memberCount; i++)
+        public IEnumerable<User> GetMemberUsers(Int64 lobbyID)
         {
-            members.Add(GetMemberUser(lobbyID, GetMemberUserId(lobbyID, i)));
+            var memberCount = MemberCount(lobbyID);
+            var members = new List<User>();
+            for (var i = 0; i < memberCount; i++)
+            {
+                members.Add(GetMemberUser(lobbyID, GetMemberUserId(lobbyID, i)));
+            }
+            return members;
         }
 
-        return members;
-    }
-
-    public void SendLobbyMessage(Int64 lobbyID, string data, SendLobbyMessageHandler handler)
-    {
-        SendLobbyMessage(lobbyID, Encoding.UTF8.GetBytes(data), handler);
+        public void SendLobbyMessage(Int64 lobbyID, string data, SendLobbyMessageHandler handler)
+        {
+            SendLobbyMessage(lobbyID, Encoding.UTF8.GetBytes(data), handler);
+        }
     }
 }

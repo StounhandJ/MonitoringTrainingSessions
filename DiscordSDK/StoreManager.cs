@@ -1,28 +1,32 @@
-namespace DiscordSDK;
+using System;
+using System.Runtime.InteropServices;
+using System.Collections.Generic;
+using System.Text;
 
-public partial class StoreManager
+namespace Discord
 {
-    public IEnumerable<Entitlement> GetEntitlements()
+    public partial class StoreManager
     {
-        var count = CountEntitlements();
-        var entitlements = new List<Entitlement>();
-        for (var i = 0; i < count; i++)
+        public IEnumerable<Entitlement> GetEntitlements()
         {
-            entitlements.Add(GetEntitlementAt(i));
+            var count = CountEntitlements();
+            var entitlements = new List<Entitlement>();
+            for (var i = 0; i < count; i++)
+            {
+                entitlements.Add(GetEntitlementAt(i));
+            }
+            return entitlements;
         }
 
-        return entitlements;
-    }
-
-    public IEnumerable<Sku> GetSkus()
-    {
-        var count = CountSkus();
-        var skus = new List<Sku>();
-        for (var i = 0; i < count; i++)
+        public IEnumerable<Sku> GetSkus()
         {
-            skus.Add(GetSkuAt(i));
+            var count = CountSkus();
+            var skus = new List<Sku>();
+            for (var i = 0; i < count; i++)
+            {
+                skus.Add(GetSkuAt(i));
+            }
+            return skus;
         }
-
-        return skus;
     }
 }

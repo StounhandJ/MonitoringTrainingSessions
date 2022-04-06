@@ -1,16 +1,20 @@
-namespace DiscordSDK;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
-public partial class StorageManager
+namespace Discord
 {
-    public IEnumerable<FileStat> Files()
+    public partial class StorageManager
     {
-        var fileCount = Count();
-        var files = new List<FileStat>();
-        for (var i = 0; i < fileCount; i++)
+        public IEnumerable<FileStat> Files()
         {
-            files.Add(StatAt(i));
+            var fileCount = Count();
+            var files = new List<FileStat>();
+            for (var i = 0; i < fileCount; i++)
+            {
+                files.Add(StatAt(i));
+            }
+            return files;
         }
-
-        return files;
     }
 }
