@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Input;
+using MonitoringTrainingSessions.Commands.DelegateCommand;
 using MonitoringTrainingSessions.Lib;
 using MonitoringTrainingSessions.Models;
 
@@ -7,10 +9,15 @@ namespace MonitoringTrainingSessions.ViewModels;
 
 public class LessonStudentViewModel : BaseViewModel
 {
+    public ICommand BackCommand { get; set; }
     
-    private static DiscordClient DiscordClient = new DiscordClient(App.DiscordAppId);
     public LessonStudentViewModel()
     {
+        BackCommand = new DelegateCommand(o =>
+        {
+            App.DiscordClient.LobbySmartDisconnect();
+            DataContext.ClickCommand.Execute("StudentPage");
+        });
     }
 
     private MainViewModel _dataContext;
@@ -40,12 +47,16 @@ public class LessonStudentViewModel : BaseViewModel
             if (value.Schedule.exist())
             {
                 Visibility = Visibility.Visible;
-                DiscordClient.ConnectOrCreateLobbyDiscord(value.discord_id, 50);
+                App.DiscordClient.ConnectOrCreateLobbyDiscord(value.discord_id, 50);
+                if (App.DiscordClient.IsMute())
+                {
+                    App.DiscordClient.Mute();
+                }
             }
             else
             {
                 Visibility = Visibility.Hidden;
-                DiscordClient.LobbySmartDisconnect();
+                App.DiscordClient.LobbySmartDisconnect();
             }
             this.OnPropertyChanged(nameof(Lesson));
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Discord;
 
 namespace MonitoringTrainingSessions.Lib
@@ -239,6 +240,7 @@ namespace MonitoringTrainingSessions.Lib
             if (currentLobby == null) return;
             User currentUser = userManager.GetCurrentUser();
             int membersCount = lobbyManager.MemberCount(currentLobby.Value.Id);
+            DisconnectVoice();
             if (IsUserOwner() && membersCount > 1)
             {
                 for (int i = 0; i < membersCount; i++)
@@ -252,13 +254,16 @@ namespace MonitoringTrainingSessions.Lib
                         break;
                     }
                 }
-
-                DisconnectVoice();
+                
                 DisconnectLobby();
             }
             else if (IsUserOwner())
             {
                 DeleteLobby();
+            }
+            else
+            {
+                DisconnectLobby();
             }
 
             ClearActivity();
@@ -343,6 +348,13 @@ namespace MonitoringTrainingSessions.Lib
             client.Dispose();
         }
 
+        public void close()
+        {
+            this.LobbySmartDisconnect();
+            // this.cancelTokenSource?.Cancel();
+            // this.discordTask = null;
+            // this.connectDiscord();
+        }
 
         private void runDiscordFlow()
         {
