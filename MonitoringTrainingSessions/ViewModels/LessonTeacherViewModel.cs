@@ -33,6 +33,10 @@ public class LessonTeacherViewModel : BaseViewModel
         {
             _dataContext = value;
             Lesson = Lesson.getOrCreate(value.User!.CurrentSchedule, DateTime.Now);
+            if (Lesson.Schedule.exist())
+            {
+                Lesson.save();
+            }
             updateMarks();
             this.OnPropertyChanged(nameof(DataContext));
         }
