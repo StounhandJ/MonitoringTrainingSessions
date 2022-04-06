@@ -86,7 +86,7 @@ public class TeacherViewModel : BaseViewModel
 
     private void update()
     {
-        if (!SelectedGroup.exist() || !SelectedSession.exist() || SelectedDate == null)
+        if (SelectedGroup==null || !SelectedGroup.exist() || !SelectedSession.exist() || SelectedDate == null)
             return;
 
         Marks.Clear();
