@@ -9,12 +9,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DiscordSDK\DiscordSDK.csproj" />
+      <PackageReference Include="Extended.Wpf.Toolkit" Version="4.2.0" />
+      <PackageReference Include="Npgsql" Version="7.0.0-preview.1" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Extended.Wpf.Toolkit" Version="4.2.0" />
-      <PackageReference Include="Npgsql" Version="7.0.0-preview.1" />
+      <ProjectReference Include="..\DiscordSDK\DiscordSDK.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading;
+using Discord;
 
 namespace MonitoringTrainingSessions.Lib
 {
@@ -130,7 +131,7 @@ namespace MonitoringTrainingSessions.Lib
             }, () =>
             {
                 log.log("Discord - Лобби не найденно, начало создания", Status.Info);
-                DiscordSDK.LobbyType type = DiscordSDK.LobbyType.Public;
+                LobbyType type = LobbyType.Public;
                 Dictionary<string, string> metadatas = new Dictionary<string, string> {{ "leagueLobbyId", partyId }};
                 discord.CreateLobby(capacity, type, metadatas, (lobby) =>
                 {

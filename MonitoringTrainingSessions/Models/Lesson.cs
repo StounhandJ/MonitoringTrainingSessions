@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MonitoringTrainingSessions.Lib.Attributes;
 using MonitoringTrainingSessions.Lib.DB;
 
@@ -65,6 +66,10 @@ public class Lesson : Model<Lesson>
 
     public void generateDisordId()
     {
-        this.discord_id = "111";
+        Random random = new Random();
+        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+        this.discord_id = new string(Enumerable.Repeat(chars, 25)
+            .Select(s => s[random.Next(s.Length)]).ToArray());
     }
 }

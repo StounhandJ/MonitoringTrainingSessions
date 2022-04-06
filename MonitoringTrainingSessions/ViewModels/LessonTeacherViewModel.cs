@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using MonitoringTrainingSessions.Commands;
 using MonitoringTrainingSessions.Commands.DelegateCommand;
+using MonitoringTrainingSessions.Lib;
 using MonitoringTrainingSessions.Models;
 
 namespace MonitoringTrainingSessions.ViewModels;
@@ -12,6 +13,7 @@ namespace MonitoringTrainingSessions.ViewModels;
 public class LessonTeacherViewModel : BaseViewModel
 {
     public ICommand SaveCommand { get; set; }
+    private static DiscordClient DiscordClient = new DiscordClient(App.DiscordAppId);
 
     public LessonTeacherViewModel()
     {
@@ -44,7 +46,17 @@ public class LessonTeacherViewModel : BaseViewModel
         set
         {
             _lesson = value;
-            Visibility = value.Schedule.exist() ? Visibility.Visible : Visibility.Hidden; 
+            if (value.Schedule.exist())
+            {
+                Visibility = Visibility.Visible;
+                DiscordClient.ConnectOrCreateLobbyDiscord(value.discord_id, 50);
+            }
+            else
+            {
+                Visibility = Visibility.Hidden;
+                DiscordClient.LobbySmartDisconnect();
+            }
+
             this.OnPropertyChanged(nameof(Lesson));
         }
     }
@@ -60,7 +72,7 @@ public class LessonTeacherViewModel : BaseViewModel
             this.OnPropertyChanged(nameof(Marks));
         }
     }
-    
+
     private Visibility _visibility = Visibility.Visible;
 
     public Visibility Visibility

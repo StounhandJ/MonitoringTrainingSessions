@@ -1,22 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
-using DiscordSDK;
+using System.Threading;
+using Discord;
 
 namespace MonitoringTrainingSessions.Lib
 {
     public class DiscordClient
     {
-        private Discord client;
+        private Discord.Discord client;
         public ActivityManager activityManager;
         private LobbyManager lobbyManager;
         private VoiceManager voiceManager;
         private UserManager userManager;
         private Lobby? currentLobby;
+        private string errorMessage;
+        private Thread? discordThread;
+        private long clientId;
 
 
         public DiscordClient(long clientId)
         {
-            client = new Discord(clientId, (UInt64) CreateFlags.NoRequireDiscord);
+            this.clientId = clientId;
+            if (!this.connectDiscord())
+                return;
+
             client.SetLogHook(LogLevel.Debug, logHook);
 
             activityManager = client.GetActivityManager();
@@ -25,12 +32,40 @@ namespace MonitoringTrainingSessions.Lib
             userManager = client.GetUserManager();
         }
 
+        private bool connectDiscord()
+        {
+            App.LogViewer.log("Discord - Подключение", Status.Info);
+            try
+            {
+                client = new Discord.Discord(this.clientId, (UInt64)CreateFlags.NoRequireDiscord);
+                App.LogViewer.log("Discord - Подключен, начало установки событий", Status.Ok);
+
+                if (this.discordThread == null || (this.discordThread != null && !this.discordThread.IsAlive))
+                {
+                    this.discordThread = new Thread((this.runDiscordFlow));
+                    this.discordThread.Start();
+                }
+
+                App.LogViewer.log("Discord - События установленны", Status.Ok);
+
+                errorMessage = "";
+                return true;
+            }
+            catch (Exception)
+            {
+                App.LogViewer.log("Discord - Не найден", Status.Error);
+                errorMessage = "Для работы программы, нужно запустить или установить Discord";
+                return false;
+            }
+        }
+
+
         public bool IsUserOwner()
         {
             var lobby = currentLobby;
             return lobby != null && lobby.Value.OwnerId == userManager.GetCurrentUser().Id;
         }
-        
+
         public bool IsConnectLobby()
         {
             return currentLobby.HasValue;
@@ -40,7 +75,7 @@ namespace MonitoringTrainingSessions.Lib
         {
             return voiceManager.IsSelfMute();
         }
-        
+
         /// <summary>
         /// Возвращает всех учатсников лобби, кроме вас
         /// </summary>
@@ -72,11 +107,34 @@ namespace MonitoringTrainingSessions.Lib
         {
             voiceManager.SetLocalVolume(userID, value);
         }
-        
+
         public int GetLocalVolume(long userID)
         {
             return voiceManager.GetLocalVolume(userID);
         }
+
+        public void ConnectOrCreateLobbyDiscord(string partyId, uint capacity)
+        {
+            this.SearchLobbyByMetadata("leagueLobbyId", partyId, (lobby) =>
+            {
+                App.LogViewer.log("Discord - Лобби найденно, начало подключения", Status.Info);
+                this.ConnectLobby(lobby.Id, lobby.Secret, (lobbyConn) =>
+                {
+                    App.LogViewer.log($"Discord - Лобби подключен, id={lobbyConn.Id}", Status.Ok);
+                    this.UpdateActivity(lobbyManager.MemberCount(lobby.Id), (int)capacity);
+                });
+            }, () =>
+            {
+                App.LogViewer.log("Discord - Лобби не найденно, начало создания", Status.Info);
+                Dictionary<string, string> metadatas = new Dictionary<string, string> { { "leagueLobbyId", partyId } };
+                this.CreateLobby(capacity, LobbyType.Public, metadatas, (lobby) =>
+                {
+                    App.LogViewer.log($"Discord - Лобби созданно, id={lobby.Id}", Status.Ok);
+                    this.UpdateActivity(lobbyManager.MemberCount(lobby.Id), (int)capacity);
+                });
+            });
+        }
+
 
         public void CreateLobby(uint lobbyCapacity, LobbyType lobbyType, Dictionary<string, string> metadatas,
             Action<Lobby> okCallback = null, Action<Result> errorCallback = null)
@@ -111,7 +169,7 @@ namespace MonitoringTrainingSessions.Lib
                     res => Console.WriteLine("Successfully deleted"));
             currentLobby = null;
         }
-        
+
         /// <summary>
         /// Поиск лобби по Metadata.
         /// </summary>
@@ -137,11 +195,12 @@ namespace MonitoringTrainingSessions.Lib
             });
         }
 
-        public void ConnectLobby(string activitySecret, Action<Lobby> okCallback = null, Action<Result> errorCallback = null)
+        public void ConnectLobby(string activitySecret, Action<Lobby> okCallback = null,
+            Action<Result> errorCallback = null)
         {
             lobbyManager.ConnectLobbyWithActivitySecret(activitySecret, (Result result, ref Lobby lobby) =>
             {
-                if (result==Result.Ok)
+                if (result == Result.Ok)
                 {
                     currentLobby = lobby;
                     ConnectVoice(lobby);
@@ -153,12 +212,13 @@ namespace MonitoringTrainingSessions.Lib
                 }
             });
         }
-        
-        public void ConnectLobby(long lobbyId, string lobbySecret, Action<Lobby> okCallback = null, Action<Result> errorCallback = null)
+
+        public void ConnectLobby(long lobbyId, string lobbySecret, Action<Lobby> okCallback = null,
+            Action<Result> errorCallback = null)
         {
-            lobbyManager.ConnectLobby(lobbyId, lobbySecret,(Result result, ref Lobby lobby) =>
+            lobbyManager.ConnectLobby(lobbyId, lobbySecret, (Result result, ref Lobby lobby) =>
             {
-                if (result==Result.Ok)
+                if (result == Result.Ok)
                 {
                     currentLobby = lobby;
                     ConnectVoice(lobby);
@@ -170,28 +230,29 @@ namespace MonitoringTrainingSessions.Lib
                 }
             });
         }
-        
+
         /// <summary>
         /// Полное отключение от лобби с возможностью его удаления.
         /// </summary>
         public void LobbySmartDisconnect()
         {
-            if (currentLobby==null) return;
+            if (currentLobby == null) return;
             User currentUser = userManager.GetCurrentUser();
             int membersCount = lobbyManager.MemberCount(currentLobby.Value.Id);
-            if (IsUserOwner() && membersCount>1)
+            if (IsUserOwner() && membersCount > 1)
             {
                 for (int i = 0; i < membersCount; i++)
                 {
                     var user = lobbyManager.GetMemberUserId(currentLobby.Value.Id, i);
-                    if (currentUser.Id!=user)
+                    if (currentUser.Id != user)
                     {
                         var txn = lobbyManager.GetLobbyUpdateTransaction(currentLobby.Value.Id);
                         txn.SetOwner(user);
-                        lobbyManager.UpdateLobby(currentLobby.Value.Id, txn, result => {});
+                        lobbyManager.UpdateLobby(currentLobby.Value.Id, txn, result => { });
                         break;
                     }
                 }
+
                 DisconnectVoice();
                 DisconnectLobby();
             }
@@ -199,17 +260,18 @@ namespace MonitoringTrainingSessions.Lib
             {
                 DeleteLobby();
             }
+
             ClearActivity();
         }
-        
+
         public void DisconnectLobby()
         {
             if (currentLobby == null) return;
             lobbyManager.DisconnectLobby(currentLobby.Value.Id,
-                    res => Console.WriteLine("Successfully disconnected from lobby"));
+                res => Console.WriteLine("Successfully disconnected from lobby"));
             currentLobby = null;
         }
-        
+
         public void ConnectVoice(Lobby lobby)
         {
             lobbyManager.ConnectVoice(lobby.Id, res => Console.WriteLine("Connected to lobby voice"));
@@ -222,7 +284,7 @@ namespace MonitoringTrainingSessions.Lib
                 lobbyManager.DisconnectVoice(currentLobby.Value.Id,
                     res => Console.WriteLine("Successfully disconnected from voice"));
         }
-        
+
         public void Mute()
         {
             if (voiceManager.IsSelfMute())
@@ -237,7 +299,7 @@ namespace MonitoringTrainingSessions.Lib
 
         public void UpdateActivity(int CurrentSize, int MaxSize)
         {
-            if (currentLobby==null) return;
+            if (currentLobby == null) return;
             var lobby = currentLobby.Value;
             var activity = new Activity
             {
@@ -260,7 +322,7 @@ namespace MonitoringTrainingSessions.Lib
 
             activityManager.UpdateActivity(activity, result => { Console.WriteLine("Update Activity {0}", result); });
         }
-        
+
         public void ClearActivity()
         {
             activityManager.ClearActivity(res => Console.WriteLine("Successfully cleared activity"));
@@ -279,6 +341,26 @@ namespace MonitoringTrainingSessions.Lib
         public void Dispose()
         {
             client.Dispose();
+        }
+
+
+        private void runDiscordFlow()
+        {
+            while (true)
+            {
+                try
+                {
+                    this.RunCallbacks();
+                }
+                catch (Exception)
+                {
+                    App.LogViewer.log("Discord - Потеря подключения", Status.Error);
+                    Thread.Sleep(10 * 1000);
+                    this.connectDiscord();
+                }
+
+                Thread.Sleep(1000 / 60);
+            }
         }
     }
 }
