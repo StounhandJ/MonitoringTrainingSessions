@@ -24,5 +24,10 @@ namespace MonitoringTrainingSessions
         {
             InitializeComponent();
         }
+
+        private void MainWindow_OnClosed(object? sender, EventArgs e)
+        {
+            App.DiscordClient.close();
+        }
     }
 }

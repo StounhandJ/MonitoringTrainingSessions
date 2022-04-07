@@ -22,10 +22,11 @@ namespace MonitoringTrainingSessions.Lib
         private uint capacity;
 
         public delegate void ActivityJoinHandler(Lobby currentLobby);
+
         public delegate void MemberUpdateHandler(int count);
 
         public event ActivityJoinHandler OnActivityJoin;
-        
+
         public event MemberUpdateHandler OnMemberUpdate;
 
 
@@ -54,7 +55,7 @@ namespace MonitoringTrainingSessions.Lib
                 // App.LogViewer.log("Discord - Подключенно к лобби по приглашению", Status.Ok);
                 // if (currentLobby != null)
                 // {
-                    OnActivityJoin?.Invoke(currentLobby ?? new Lobby());
+                OnActivityJoin?.Invoke(currentLobby ?? new Lobby());
                 // }
             };
         }
@@ -378,6 +379,7 @@ namespace MonitoringTrainingSessions.Lib
         public void close()
         {
             this.LobbySmartDisconnect();
+            this.discordThread?.Interrupt();
             // this.cancelTokenSource?.Cancel();
             // this.discordTask = null;
             // this.connectDiscord();
@@ -398,7 +400,16 @@ namespace MonitoringTrainingSessions.Lib
                     this.connectDiscord();
                 }
 
-                Thread.Sleep(1000 / 60);
+                try
+                {
+                    Thread.Sleep(1000 / 60);
+                }
+                catch (ThreadInterruptedException e)
+                {
+                    Console.WriteLine("newThread cannot go to sleep - " +
+                                      "interrupted by main thread.");
+                    return;
+                }
             }
         }
     }

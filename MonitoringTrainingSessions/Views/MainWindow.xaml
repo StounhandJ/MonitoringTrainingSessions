@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MonitoringTrainingSessions"
         xmlns:viewModels="clr-namespace:MonitoringTrainingSessions.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="750" Width="900">
+        Title="MainWindow" Height="750" Width="900" Closed="MainWindow_OnClosed">
         <Window.DataContext>
         <viewModels:MainViewModel />
     </Window.DataContext>
