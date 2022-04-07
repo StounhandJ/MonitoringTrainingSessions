@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using MonitoringTrainingSessions.Commands;
+using MonitoringTrainingSessions.Lib;
 using MonitoringTrainingSessions.Models;
 using MonitoringTrainingSessions.Pages;
 
@@ -18,7 +19,7 @@ public class MainViewModel : BaseViewModel
         {
             _user = value;
             this.OnPropertyChanged(nameof(User));
-            if (value != null)
+            if (value != null && value.exist())
             {
                 switch (value.Role.Id)
                 {
@@ -32,6 +33,8 @@ public class MainViewModel : BaseViewModel
                         ClickCommand.Execute("AdminPage");
                         break;
                 }
+
+                ManagmentSave.saveId(value.Id).Wait();
             }
             else
             {
@@ -39,6 +42,7 @@ public class MainViewModel : BaseViewModel
                 {
                     DataContext = new AuthorizationViewModel() { DataContext = this }
                 };
+                ManagmentSave.saveId(-1).Wait();
             }
         }
     }
@@ -97,16 +101,16 @@ public class MainViewModel : BaseViewModel
 
     public MainViewModel()
     {
-        Roles = new ObservableCollection<Role>(Role.selectAll());
-        Groups = new ObservableCollection<Group>(Group.selectAll());
-        Sessions = new ObservableCollection<Session>(Session.selectAll());
-        ClickCommand = new ChangePageCommand(this);
-        User = null;
         ExitCommand = new RelayCommand(obj =>
         {
             Content = new Page();
             User = null;
         });
+        Roles = new ObservableCollection<Role>(Role.selectAll());
+        Groups = new ObservableCollection<Group>(Group.selectAll());
+        Sessions = new ObservableCollection<Session>(Session.selectAll());
+        ClickCommand = new ChangePageCommand(this);
+        User = User.getById(ManagmentSave.loadId());
         App.DiscordClient.OnActivityJoin += lobby =>
         {
             if (User==null)

@@ -29,8 +29,8 @@
                     FontSize="15"
                     Background="#45edd1" />
 
-            <Button Command="{Binding DataContext.ClickCommand}"
-                    CommandParameter="AuthorizationPage" Width="100" Height="35"
+            <Button Command="{Binding DataContext.ExitCommand}"
+                    Width="100" Height="35"
                     Content="Выход" HorizontalAlignment="Center" VerticalAlignment="Center"
                     FontSize="15"
                     Background="#45edd1" />
