@@ -13,36 +13,43 @@
                      FontSize="15"
                      Width="200" Height="40" x:Name="LoginTextBox" HorizontalAlignment="Left" Background="#37b09c" />
         </StackPanel>
-        
+
         <StackPanel Orientation="Horizontal">
             <TextBox FontSize="16" VerticalContentAlignment="Center" Text="Пароль: " />
             <TextBox VerticalAlignment="Center"
                      FontSize="15"
                      Width="200" Height="40" x:Name="PasswordTextBox" HorizontalAlignment="Left" Background="#37b09c" />
         </StackPanel>
-        
+
         <StackPanel Orientation="Horizontal">
             <TextBox FontSize="16" VerticalContentAlignment="Center" Text="ФИО: " />
             <TextBox VerticalAlignment="Center"
                      FontSize="15"
                      Width="200" Height="40" x:Name="FIOTextBox" HorizontalAlignment="Left" Background="#37b09c" />
         </StackPanel>
-        
+
         <StackPanel Orientation="Horizontal">
             <TextBox FontSize="16" VerticalContentAlignment="Center" Text="Роль: " />
             <ComboBox SelectedIndex="0" Width="200" Height="40"
-                  HorizontalAlignment="Left" Background="#37b09c"
-                  x:Name="RoleComboBox"
-                  DisplayMemberPath="name" />
+                      HorizontalAlignment="Left" Background="#37b09c"
+                      SelectionChanged="RoleComboBox_OnSelectionChanged"
+                      x:Name="RoleComboBox"
+                      DisplayMemberPath="name" />
         </StackPanel>
         <StackPanel Orientation="Horizontal">
             <TextBox FontSize="16" VerticalContentAlignment="Center" Text="Группы: " />
-            <xctk:CheckComboBox x:Name="GroupsCheckComboBox" Margin="5"/>
+            <Grid>
+                <ComboBox SelectedIndex="0" Width="200" Height="40"
+                          HorizontalAlignment="Left" Background="#37b09c"
+                          x:Name="GroupsCheckComboBox2"
+                          DisplayMemberPath="name" />
+                <xctk:CheckComboBox x:Name="GroupsCheckComboBox" Margin="5" />
+            </Grid>
         </StackPanel>
         <TextBlock Name="ErrorTextBlock" Foreground="Red" HorizontalAlignment="Left"
                    VerticalAlignment="Center"
                    FontSize="20" />
-        <Button Click="SaveButton_OnClick" x:Name="SaveButton" FontSize="18" Content="Сохранить"/>
-        <Button Click="DeleteButton_OnClick" x:Name="DeleteButton" FontSize="18" Content="Удалить"/>
+        <Button Click="SaveButton_OnClick" x:Name="SaveButton" FontSize="18" Content="Сохранить" />
+        <Button Click="DeleteButton_OnClick" x:Name="DeleteButton" FontSize="18" Content="Удалить" />
     </StackPanel>
 </Page>

@@ -22,6 +22,10 @@ public partial class CahngeUserPage : Page
         this.RoleComboBox.SelectedItem = user.Role;
         this.GroupsCheckComboBox.ItemsSource = dataContext.Groups;
         this.GroupsCheckComboBox.SelectedItemsOverride = user.Groups;
+        this.GroupsCheckComboBox.Visibility = user.Role.Id==Role.TEACHER?Visibility.Visible:Visibility.Hidden;
+        this.GroupsCheckComboBox2.ItemsSource = dataContext.Groups;
+        this.GroupsCheckComboBox2.SelectedItem = user.Groups;
+        this.GroupsCheckComboBox2.Visibility =  user.Role.Id==Role.STUDENT?Visibility.Visible:Visibility.Hidden;;
         this.user = user;
         this.page = page;
         this.dataContext = dataContext;
@@ -49,7 +53,15 @@ public partial class CahngeUserPage : Page
         this.user.login = LoginTextBox.Text;
         this.user.FIO = FIOTextBox.Text;
         this.user.Role = (Role)RoleComboBox.SelectedItem;
-        this.user.Groups = (List<Group>)GroupsCheckComboBox.SelectedItemsOverride;
+        if (user.Role.Id==Role.TEACHER)
+        {
+            this.user.Groups = (List<Group>)GroupsCheckComboBox.SelectedItemsOverride;
+        }
+        else if (user.Role.Id==Role.STUDENT)
+        {
+            this.user.Groups = new List<Group>(){(Group)GroupsCheckComboBox2.SelectedItem};
+        }
+        
 
         if (PasswordTextBox.Text != "")
         {
@@ -65,5 +77,11 @@ public partial class CahngeUserPage : Page
     {
         this.user.delete();
         dataContext.Content = page;
+    }
+
+    private void RoleComboBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        this.GroupsCheckComboBox.Visibility = ((Role)RoleComboBox.SelectedItem).Id==Role.TEACHER?Visibility.Visible:Visibility.Hidden;
+        this.GroupsCheckComboBox2.Visibility =  ((Role)RoleComboBox.SelectedItem).Id==Role.STUDENT?Visibility.Visible:Visibility.Hidden;;
     }
 }
