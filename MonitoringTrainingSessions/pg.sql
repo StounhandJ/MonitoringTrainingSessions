@@ -83,3 +83,6 @@ values (1, '8:30', '10:00'),
        (3, '12:00', '13:30'),
        (4, '14:00', '15:30'),
        (5, '15:40', '17:10');
+
+insert into users("role_id", "surname", "name", "patronymic", "login", "password")
+values (3, 'Admin', 'Admin', '-', 'admin', 'admin');

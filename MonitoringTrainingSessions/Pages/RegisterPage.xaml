@@ -44,7 +44,7 @@
         <PasswordBox Grid.Row="3" Grid.Column="1" Name="PasswordBox" VerticalAlignment="Center" FontSize="15"
                  Width="200" Height="40" HorizontalAlignment="Left" />
         <ComboBox Grid.Row="4" Grid.Column="1" SelectedIndex="0" SelectedItem="{Binding Role}" Width="200" Height="40"
-                  HorizontalAlignment="Left" Background="#37b09c" ItemsSource="{Binding DataContext.Roles}"
+                  HorizontalAlignment="Left" Background="#37b09c" ItemsSource="{Binding DataContext.LimitedRoles}"
                   DisplayMemberPath="name" SelectedValuePath="ID" />
         
         <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding ErrorText}" Foreground="Red" HorizontalAlignment="Left"

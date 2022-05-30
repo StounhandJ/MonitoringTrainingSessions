@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Input;
 using MonitoringTrainingSessions.Commands;
@@ -68,6 +69,17 @@ public class MainViewModel : BaseViewModel
         {
             _roles = value;
             this.OnPropertyChanged(nameof(Roles));
+            this.OnPropertyChanged(nameof(LimitedRoles));
+        }
+    }
+    
+    public ObservableCollection<Role> LimitedRoles
+    {
+        get
+        {
+            List<Role> r = new List<Role>(_roles);
+            r.RemoveAll(rm => rm.Id == Role.ADMIN);
+            return new ObservableCollection<Role>(r);
         }
     }
 
