@@ -41,6 +41,7 @@ public class TeacherViewModel : BaseViewModel
         set
         {
             _selectedGroup = value;
+            DataContext.AdditionalCommandParametr = value;
             update();
             this.OnPropertyChanged(nameof(SelectedGroup));
         }

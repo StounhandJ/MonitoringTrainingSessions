@@ -70,7 +70,7 @@ public class User : Model<User>
             }
         }
     }
-    
+
     [Additional]
     public List<Group> Groups
     {
@@ -81,7 +81,7 @@ public class User : Model<User>
         }
         set
         {
-            var currentGroups = Groups; 
+            var currentGroups = Groups;
             foreach (var group in currentGroups)
             {
                 if (!value.Any(g => g.Equals(group)))
@@ -112,20 +112,6 @@ public class User : Model<User>
             }
         }
     }
-    
-    [Additional]
-    public Schedule CurrentSchedule
-    {
-        get
-        {
-            TimeSchedule? timeSchedule = TimeSchedule.getCurrentTimeSchedule();
-            if (timeSchedule == null || Groups.Count==0)
-                return new Schedule();
-            
-            return Schedule.getByGroupDay(Groups.First(), (int)DateTime.Now.DayOfWeek, timeSchedule);
-        }
-        set { }
-    }
 
     public User(string login, string password, string surname, string name, string patronymic, Role role)
     {
@@ -151,6 +137,15 @@ public class User : Model<User>
     {
     }
 
+    public Schedule CurrentSchedule(Group? group = null)
+    {
+        TimeSchedule? timeSchedule = TimeSchedule.getCurrentTimeSchedule();
+        if (timeSchedule == null || Groups.Count == 0)
+            return new Schedule();
+
+        return Schedule.getByGroupDay(group ?? Groups.First(), (int)DateTime.Now.DayOfWeek, timeSchedule);
+    }
+
     public static User getByLoginPassword(string login, string password)
     {
         return User.select(new Dictionary<string, object?>()
@@ -159,7 +154,7 @@ public class User : Model<User>
             { "password", Encryption.CreateMD5(password) }
         });
     }
-    
+
     public static User getByLogin(string login)
     {
         return User.select(new Dictionary<string, object?>()

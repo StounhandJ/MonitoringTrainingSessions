@@ -106,6 +106,18 @@ public class MainViewModel : BaseViewModel
             this.OnPropertyChanged(nameof(Groups));
         }
     }
+    
+    private object? _additionalCommandParametr;
+
+    public object? AdditionalCommandParametr
+    {
+        get => _additionalCommandParametr;
+        set
+        {
+            _additionalCommandParametr = value;
+            this.OnPropertyChanged(nameof(AdditionalCommandParametr));
+        }
+    }
 
     public ICommand ClickCommand { get; set; }
 

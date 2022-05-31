@@ -107,7 +107,7 @@ public class LessonStudentViewModel : BaseViewModel
 
     private void update()
     {
-        Lesson = Lesson.getOrCreate(DataContext.User!.CurrentSchedule, DateTime.Now);
+        Lesson = Lesson.getOrCreate(DataContext.User!.CurrentSchedule(), DateTime.Now);
         Mark = Mark.getBySessionUserDate(Lesson.Schedule.Session, DataContext.User!, DateTime.Now);
     }
 }

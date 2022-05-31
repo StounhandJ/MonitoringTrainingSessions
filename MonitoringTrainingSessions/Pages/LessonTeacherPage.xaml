@@ -33,7 +33,7 @@
                 Content="Назад" HorizontalAlignment="Center" VerticalAlignment="Center"
                 FontSize="15"
                 Background="#45edd1" />
-        <StackPanel Grid.Row="0" Grid.Column="1" Visibility="{Binding Visibility}" VerticalAlignment="Center" Orientation="Horizontal">
+        <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Visibility="{Binding Visibility}" VerticalAlignment="Center" Orientation="Horizontal">
             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="Пара: " />
             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Text="{Binding Lesson.Schedule.Session.name}" />
             <TextBlock TextAlignment="Center" VerticalAlignment="Center" Margin="80 0 0 0" Text="Номер пары: " />
