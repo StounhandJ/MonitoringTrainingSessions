@@ -43,6 +43,12 @@ public partial class CahngeUserPage : Page
             ErrorTextBlock.Text = "Неверный логин или пароль";
             return;
         }
+        
+        if (!User.getByLogin(LoginTextBox.Text).exist())
+        {
+            ErrorTextBlock.Text = "Данный логин уже занят";
+            return;
+        }
 
         if (string.IsNullOrWhiteSpace(FIOTextBox.Text) || FIOTextBox.Text.Split(' ').Length < 2)
         {

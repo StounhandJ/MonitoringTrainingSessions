@@ -29,6 +29,12 @@ public class RegisterCommand : ICommand
             m_viewModel.ErrorText = "Неверный формат логин";
             return;
         }
+        
+        if (!User.getByLogin(m_viewModel.Login).exist())
+        {
+            m_viewModel.ErrorText = "Данный логин уже занят";
+            return;
+        }
 
         if (string.IsNullOrWhiteSpace(m_viewModel.FIO) || m_viewModel.FIO.Split(' ').Length < 2)
         {

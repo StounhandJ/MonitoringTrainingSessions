@@ -159,4 +159,12 @@ public class User : Model<User>
             { "password", Encryption.CreateMD5(password) }
         });
     }
+    
+    public static User getByLogin(string login)
+    {
+        return User.select(new Dictionary<string, object?>()
+        {
+            { "login", login }
+        });
+    }
 }
