@@ -75,8 +75,5 @@
                                     Binding="{Binding Path=name, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
-        <Button Grid.Row="6" Grid.Column="1" Padding="5" Width="170" Height="35" Content="Выйти"
-                Command="{Binding DataContext.ExitCommand}" HorizontalAlignment="Center" VerticalAlignment="Center"
-                FontSize="15" Background="#45edd1" />
     </Grid>
 </Page>
